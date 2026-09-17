@@ -1,7 +1,34 @@
 {
-  "extends": "./tsconfig.base.json",
-  "compileOnSave": false,
-  "files": [],
-  "references": [],
-  "compilerOptions": {}
+    "extends": "./tsconfig.base.json",
+    "compileOnSave": false,
+    "files": [],
+    "references": [
+        {
+            "path": "./apps/exp-shop-server"
+        },
+        {
+            "path": "./apps/exp-shop-web"
+        },
+        {
+            "path": "./libs/shared/interfaces"
+        },
+        {
+            "path": "./libs/shared/utils"
+        },
+        {
+            "path": "./libs/shared/ui"
+        },
+        {
+            "path": "./libs/backend/prisma"
+        },
+        {
+            "path": "./apps/exp-shop-server-e2e"
+        },
+        {
+            "path": "./apps/exp-shop-web-e2e"
+        }
+    ],
+    "compilerOptions": {
+        "types": ["node"]
+    }
 }

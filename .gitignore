@@ -48,3 +48,14 @@ Thumbs.db
 .nx/polygraph
 .nx/self-healing
 .nx/migrate-runs
+.angular
+
+__screenshots__/
+
+# Prisma generated client (regenerated via `prisma generate`)
+**/generated/prisma
+
+# Environment variables (contain real DB credentials)
+.env
+.env.*
+!.env.example

@@ -1,0 +1,87 @@
+{
+  "name": "exp-shop-web",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "prefix": "app",
+  "sourceRoot": "apps/exp-shop-web/src",
+  "tags": ["scope:frontend", "type:app"],
+  "targets": {
+    "build": {
+      "executor": "@angular/build:application",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "outputPath": "dist/apps/exp-shop-web",
+        "browser": "apps/exp-shop-web/src/main.ts",
+        "tsConfig": "apps/exp-shop-web/tsconfig.app.json",
+        "inlineStyleLanguage": "scss",
+        "assets": [
+          {
+            "glob": "**/*",
+            "input": "apps/exp-shop-web/public"
+          }
+        ],
+        "styles": ["apps/exp-shop-web/src/styles.scss"],
+        "server": "apps/exp-shop-web/src/main.server.ts",
+        "ssr": {
+          "entry": "apps/exp-shop-web/src/server.ts"
+        },
+        "outputMode": "server"
+      },
+      "configurations": {
+        "production": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "500kb",
+              "maximumError": "1mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "4kb",
+              "maximumError": "8kb"
+            }
+          ],
+          "outputHashing": "all"
+        },
+        "development": {
+          "optimization": false,
+          "extractLicenses": false,
+          "sourceMap": true
+        }
+      }
+    },
+    "serve": {
+      "continuous": true,
+      "executor": "@angular/build:dev-server",
+      "defaultConfiguration": "development",
+      "configurations": {
+        "production": {
+          "buildTarget": "exp-shop-web:build:production"
+        },
+        "development": {
+          "buildTarget": "exp-shop-web:build:development"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    },
+    "test": {
+      "executor": "@angular/build:unit-test",
+      "options": {
+        "watch": false
+      }
+    },
+    "serve-static": {
+      "continuous": true,
+      "executor": "@nx/web:file-server",
+      "options": {
+        "buildTarget": "exp-shop-web:build",
+        "port": 4200,
+        "staticFilePath": "dist/apps/exp-shop-web/browser",
+        "spa": true
+      }
+    }
+  }
+}

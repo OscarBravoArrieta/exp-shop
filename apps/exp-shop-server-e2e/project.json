@@ -1,0 +1,17 @@
+{
+  "name": "exp-shop-server-e2e",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "implicitDependencies": ["exp-shop-server"],
+  "projectType": "application",
+  "targets": {
+    "e2e": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{e2eProjectRoot}"],
+      "options": {
+        "jestConfig": "apps/exp-shop-server-e2e/jest.config.cts",
+        "passWithNoTests": true
+      },
+      "dependsOn": ["exp-shop-server:build", "exp-shop-server:serve"]
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+        "outDir": "../../dist/out-tsc",
+        "rootDir": "../..",
+        "types": ["node"],
+        "declaration": true
+    },
+    "files": ["src/main.ts"],
+    "include": ["./src/**/*.ts"],
+    "exclude": ["./src/**/*.spec.ts", "./src/**/*.test.ts"],
+    "references": [
+        {
+            "path": "../../libs/shared/interfaces/tsconfig.lib.json"
+        }
+    ]
+}

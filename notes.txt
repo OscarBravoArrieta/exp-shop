@@ -1,0 +1,219 @@
+1. Install the Nx cli
+npm add --global nx
+
+2. Start a New Project
+npx create-nx-workspace@latest
+
+3. Add plugin for manage apps:
+nx add @nx/nest
+nx add @nx/angular
+    If the instalatiion generates this error: The "@nx/angular" plugin doesn't support the existing TypeScript setup
+    in the tsconfig.base.json file, set "declaration": false,
+
+4. Creating apps
+nx g @nx/nest:app apps/exp-shop-server
+nx g @nx/angular:app apps/exp-shop-web
+
+5. Configurate shared libs in the mono repo
+nx add @nx/js
+Modelos, Interfaces y DTOs (Backend + Frontend): Usa @nx/js:lib.
+nx g @nx/js:lib libs/shared/interfaces --importPath=@expert-shop/shared/interfaces --bundler=none
+
+
+Lógica de Dominio / Utilidades JS puras (Backend + Frontend): Usa @nx/js:lib.
+nx g @nx/js:lib libs/shared/utils --importPath=@expert-shop/shared/utils --bundler=none
+
+Componentes UI / Servicios de Angular (Solo Frontend): Usa @nx/angular:lib.
+nx g @nx/angular:lib libs/shared/ui --importPath=@expert-shop/shared/ui
+nx g @nx/angular:lib libs/shared/ui --importPath=@expert-shop/shared/ui --prefix=shop --standalone=true
+
+
+npm i class-validator class-transformer
+
+6. La regla @nx/enforce-module-boundaries de ESLint sirve para evitar dependencias circulares
+    Añade la propiedad tags en el archivo project.json de cada uno de tus proyectos. Esto define el rol y ámbito de cada aplicación o librería.
+
+    Backend (apps/exp-shop-server/project.json):
+
+    {
+        "name": "exp-shop-server",
+        "tags": ["scope:backend", "type:app"]
+    }
+
+    Frontend (apps/exp-shop-web/project.json):
+
+    {
+        "name": "exp-shop-web",
+        "tags": ["scope:frontend", "type:app"]
+    }
+
+    Librería TS Compartida (libs/shared/interfaces/project.json):
+
+    {
+        "name": "shared-interfaces",
+        "tags": ["scope:shared", "type:util"]
+    }
+
+    Librería UI de Angular (libs/shared/ui/project.json):
+
+    {
+        "name": "shared-ui",
+        "tags": ["scope:frontend", "type:ui"]
+    }
+
+
+Abre tu archivo de configuración raíz de ESLint (eslint.config.js, eslint.config.mjs o .eslintrc.base.json). Busca la regla @nx/enforce-module-boundaries y ajusta el arreglo depConstraints:JavaScript"@nx/enforce-module-boundaries": [
+  "error",
+  {
+    "enforceBuildableLibDependency": true,
+    "allow": [],
+    "depConstraints": [
+      {
+        "sourceTag": "scope:backend",
+        "onlyDependOnLibsWithTags": ["scope:backend", "scope:shared"]
+      },
+      {
+        "sourceTag": "scope:frontend",
+        "onlyDependOnLibsWithTags": ["scope:frontend", "scope:shared"]
+      },
+      {
+        "sourceTag": "scope:shared",
+        "onlyDependOnLibsWithTags": ["scope:shared"]
+      },
+      {
+        "sourceTag": "type:app",
+        "onlyDependOnLibsWithTags": ["type:util", "type:ui", "type:feature"]
+      },
+      {
+        "sourceTag": "type:util",
+        "onlyDependOnLibsWithTags": ["type:util"]
+      }
+    ]
+  }
+]
+Efecto directo: Si intentas importar componentes de Angular (scope:frontend) dentro de NestJS (scope:backend), ESLint marcará un error de compilación.   
+
+nx run-many -t lint
+
+
+7. Agregar el plugin de Storybook a Nx
+
+nx add @nx/storybook
+
+8. Configurar prisma ORM
+
+  a)Inatalling
+    npm install @prisma/client@7.10.0
+    npm install --save-dev prisma@7.10.0
+
+  b) Generate prisma library with Nx:
+
+    nx g @nx/js:lib libs/backend/prisma --bundler=none --unitTestRunner=none
+
+8. Create a free account in neon postgre, create a new project and get the connection link to the database
+
+  Set up this Neon project in the current working directory.
+
+  1. `npm i -g neon@latest && neon login`
+  2. `neon skills -y`
+  3. `neon mcp -y`
+  4. `neon link --project-id crimson-sea-37337335 --branch production -y`
+  5. `neon config init`
+  6. Update `neon.ts`:
+
+  ```ts
+  import { defineConfig } from "@neon/config/v1";
+
+  export default defineConfig({
+    auth: true,
+  });
+  ```
+
+  7. `neon deploy`
+
+9. Installing prisma adapter:
+
+  npm install pg @prisma/adapter-pg
+  npm install -D @types/pg
+
+  Desde la raíz del monorepo: npx prisma init --datasource-provider postgresql (respeta tu .env existente).
+  Mueve el schema.prisma generado a libs/backend/prisma/src/lib/schema.prisma.
+  Edita el prisma.config.ts que se generó en la raíz para que su propiedad schema apunte a esa nueva ruta, y define el output del generador hacia algo como libs/backend/prisma/src/generated, para que el cliente generado quede asociado a esa lib backend-only y no se mezcle en node_modules.
+  Todos los comandos (prisma migrate, prisma generate, prisma studio) se siguen corriendo desde la raíz — prisma.config.ts es el que le dice dónde está el schema real.
+
+  npm i --save-dev @types/node
+  npm install @prisma/config dotenv
+  npm install --save-dev prisma dotenv
+
+  Haz las configuraciones necesarias en path y schema en prisma.config.ts:
+
+  import "dotenv/config";
+  import { defineConfig, env } from "prisma/config";
+
+  export default defineConfig({
+    schema: "libs/backend/prisma/src/lib/schema.prisma",
+    migrations: {
+      path: "libs/backend/prisma/src/lib/migrations",
+    },
+    datasource: {
+      url: env("DATABASE_URL"),
+    },
+  });
+
+10. Createa user model in schema.prisma:
+  model User {
+    id        String @id @default(uuid())
+    fullName  String
+    email     String   @unique
+    password  String
+    roles     String[] @default(["user"])
+    isActive  Boolean  @default(true)
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@map("users")
+  }
+
+11. Execute:
+  npx prisma migrate dev --name init_user
+
+  Migración aplicada correctamente contra tu base de Neon.
+
+  Se creó la tabla users en neondb (columnas id, fullName, email, password, roles, isActive, createdAt, updatedAt, con el índice único en email).
+  El archivo quedó en libs/backend/prisma/src/lib/migrations/20260917205548_init_user/migration.sql, correctamente ignorado por git al ser parte del código versionable (las migraciones sí se commitean — a diferencia del cliente generado, que dejamos en .gitignore).
+  Prisma regeneró el cliente automáticamente después de migrar, así que PrismaService ya tiene el modelo User sincronizado con la base real.
+  Con esto, exp-shop-server ya puede inyectar PrismaService en un módulo/servicio y hacer this.user.findMany(), this.user.create(...), etc. contra la tabla real. Avísame cuando quieras armar el primer endpoint/CRUD de User o seguir con otro modelo.  
+
+
+
+
+
+
+
+
+-----------------------------
+ nx run exp-shop-web:serve:development
+ 
+ npx nx run exp-shop-web:serve --configuration=development 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+IA de google: 
+https://share.google/aimode/81a0vCpWFuRgh3SuK
+
+https://www.google.com/search?q=en+nx+23.2.0+como+agregar+aplicaciones+al+repositorio&csuir=1&aep=34&kgs=5e6c902d4e4fd7d8&shem=agpl%2Caiolsbe%2Casdpe%2Cepsd1%2Crimspwouoe&shndl=37&shmd=H4sIAAAAAAAA_3XNQYoCMRCF4end4EZw6SrMUjDRFmcxeJdQJkV1QXclVCLdS481Z_A8HsAWdDXM9sH3v8W9WRxRjEymPdjW7kxIQzJAigRqIPccIHASLAZ6o5hT4ZqU0_rU1ZrLj3PjOFoqFSoHO2tXEDR026xzyQEPvnSg6Gt3Gc4C3Nss9LV6a0qJerTAbvMxXZfX5vfz1vj_2jwAYXFnBYks9NLkSSEySnX76c_mZy8RNPr99y7m5_0DJC5uevcAAAA&shmds=v1_ARwrE22BdiNUMlzMgd0U2W89MSrC6ZgZAbacE9Npyqdk8Mge8g&source=sh%2Fx%2Faim%2Fm1%2F1&atvm=2&mtid=tmmgas7bG_aZwbkP5c6zoQE&mstk=AUtExfBEmNjduY1_YYyFYRVo6CjmNVEiAiqlCgvyiJ3AIBhUlLpg7pBxE7EbA64_7K_ewGz4HMv_1MHp44ONF6UtEEQUhCM24Os5XSsHxgVXxlJlDOjWR8kfefOJs9skmL1FhV2gGWYBSUZDCYKGC9uGXNcMEiZ1M3rYB9dsz03PGhn8UiBXfaY1PxF4miH5Ad2yqYs13Wd0-NZXbK4EwSm7v5Zf_Ky1V7RtgKAFxnCD21fwNEBsUz4n5SiqNHo_urypS5JpAyOue8UlVSNQ-7v2GmEiheaRkCnKRlyO1CY1GhDb1WJ41ZInksT_MDQTSVA0KGx6N-9y4_wgAA&lns_mode=cvst&udm=50

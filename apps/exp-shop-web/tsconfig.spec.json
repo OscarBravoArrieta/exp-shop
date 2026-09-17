@@ -1,0 +1,15 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "../../dist/out-tsc",
+    "rootDir": "../..",
+    "declaration": true,
+    "types": ["vitest/globals"]
+  },
+  "include": ["src/**/*.ts", "src/**/*.d.ts"],
+  "references": [
+    { "path": "../../libs/shared/interfaces/tsconfig.lib.json" },
+    { "path": "../../libs/shared/utils/tsconfig.lib.json" },
+    { "path": "../../libs/shared/ui/tsconfig.lib.json" }
+  ]
+}

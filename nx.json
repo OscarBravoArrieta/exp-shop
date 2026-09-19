@@ -52,7 +52,9 @@
     "analytics": true,
     "generators": {
         "@nx/angular:library": {
-            "unitTestRunner": "none"
+            "unitTestRunner": "none",
+            "style": "scss",
+            "skipTests": true
         },
         "@nx/angular:component": {
             "style": "css"

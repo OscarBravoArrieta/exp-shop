@@ -208,7 +208,24 @@ Se confirmó vía `git log` que el `.env` nunca llegó a commitearse.
 
 ---
 
-## 9. Pendientes conocidos (no bloquean lo anterior)
+## 9. Entorno: `NX Failed to process project graph` (`@nx/playwright/plugin` worker exited unexpectedly)
+
+**Síntoma:** cualquier comando `nx` (`serve`, `g`, `build`, etc.) falla con:
+```
+NX   Failed to process project graph.
+An error occurred while processing files for the @nx/playwright/plugin plugin (Defined at nx.json#plugins[2]).
+  - Plugin worker "@nx/playwright/plugin" exited unexpectedly.
+```
+
+**Causa:** Nx aísla cada plugin (incluido `@nx/playwright`) en un subproceso propio, comunicándose por un named pipe de Windows. En esta máquina ese subproceso falla al abrir su pipe (probablemente interferencia de antivirus/EDR con sockets de child processes) — y como el aislamiento aplica a todo el project graph, bloquea *cualquier* comando `nx`, no solo los relacionados con e2e/Playwright.
+
+**Solución permanente:**
+1. Variable de entorno de **usuario** en Windows: `NX_ISOLATE_PLUGINS=false` (exacto en minúsculas — Nx compara el string literal `'false'`). Configuración → Variables de entorno → Variables de usuario → Nueva. Requiere cerrar **todas** las ventanas de la app que abre la terminal (VS Code incluido) y volver a abrirla — un cambio de variable de entorno del sistema no llega a procesos ya corriendo.
+2. Si el error persiste con la variable ya confirmada (`$env:NX_ISOLATE_PLUGINS` la imprime en `false`), es porque el **daemon de Nx** — un proceso de fondo que sobrevive al cierre de la terminal — quedó arrancado desde antes de que la variable existiera. Un solo `npx nx daemon --stop` lo mata; el próximo comando levanta un daemon nuevo que sí hereda la variable correcta. No debería hacer falta repetirlo salvo que la variable de entorno cambie de nuevo.
+
+---
+
+## 10. Pendientes conocidos (no bloquean lo anterior)
 
 - **Proyectos e2e** (`apps/exp-shop-server-e2e`, `apps/exp-shop-web-e2e`): al compilar todo el árbol con `tsc -b` aparecen errores preexistentes y no relacionados con lo anterior — tipos de `jest` faltantes, `module`/`moduleResolution` inconsistentes, y uso de `import.meta.dirname` en `playwright.config.mts` (requiere Node ≥ 20.11). No se tocaron.
 - **Migraciones futuras**: recuerda correr `npx prisma migrate dev --name <nombre>` cada vez que cambies `schema.prisma`, y `npx prisma generate` si solo cambias el generador sin tocar el modelo (migrate ya lo hace automático).
@@ -216,6 +233,6 @@ Se confirmó vía `git log` que el `.env` nunca llegó a commitearse.
 
 ---
 
-## 10. Archivos de "skills" de agentes de IA (`.agents/`, `.claude/skills/`, `.cursor/`, `.github/instructions/`, `.opencode/`)
+## 11. Archivos de "skills" de agentes de IA (`.agents/`, `.claude/skills/`, `.cursor/`, `.github/instructions/`, `.opencode/`)
 
 Son paquetes de **documentación de referencia** que asistentes de IA (Claude Code, Cursor, Copilot, opencode, Windsurf) cargan para responder con la sintaxis/CLI/API *actual* de una herramienta (en este caso, Prisma y Nx) en lugar de depender solo de conocimiento entrenado, que puede estar desactualizado. Se instalaron automáticamente al invocar por primera vez ayuda especializada de Prisma en esta sesión. No son código de la aplicación — son intercambiables entre editores/asistentes, por eso aparecen replicados en varias carpetas (una por herramienta). `skills-lock.json` fija qué versión de cada skill quedó instalada. Queda a tu criterio si los versionas (para que cualquier compañero que abra el repo con estas herramientas tenga el mismo contexto) o los agregas a `.gitignore` como tooling local.

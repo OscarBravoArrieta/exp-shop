@@ -1,1 +1,77 @@
-<p>header works!</p>
+<header class="layout-topbar">
+    <div class="logo">
+        <div class="flex flex-row flex-wrap">
+            <div class="flex align-items-center justify-content-center">
+                <p-image
+                    src="logos/my-eCommerce1.png"
+                    alt="Image"
+                    width="30%"
+                    routerLink="/"
+                    class="cursor-pointer"
+                >
+                </p-image>
+            </div>
+            <div class="flex align-items-center justify-content-center">MY STORE</div>
+        </div>
+    </div>
+    <nav class="topbar-menu">
+        <div class="card flex justify-center">
+            <div class="flex align-items-center justify-content-center mr-2">
+                <div class="card flex">
+                    <p class="green-50 text-sm">Hola, Usuario, Que bueno verte.</p>
+                </div>
+                <!-- <div class="card flex">
+                    @if (userProfile(); as user) {
+                        <p class="green-50 text-sm">Hola, {{ user.name }}, ¡Qué bueno verte!</p>
+                    } @else {
+                        <p class="green-50 text-sm">Invitado (Cargando...)</p>
+                    }
+                </div> -->
+            </div>
+
+            <div class="flex align-items-center justify-content-center mr-2">
+                <button pButton>Register</button>
+            </div>
+            <div class="flex align-items-center justify-content-center">
+                <button pButton severity="contrast" (click)="callLogin()">
+                    <svg data-p-icon="sign-in"></svg>Login
+                </button>
+            </div>
+            <div class="flex align-items-center justify-content-center">
+                <p-overlaybadge value="4" severity="danger">
+                    <svg data-p-icon="shopping-cart" [size]="24"></svg>
+                </p-overlaybadge>
+            </div>
+            <div class="flex align-items-center justify-content-center ml-2">
+                <div class="card flex justify-center ml-2">
+                    <div class="card">
+                        <p-menu #menu [model]="items" [popup]="true">
+                            <ng-template #end>
+                                <button
+                                    pRipple
+                                    class="relative overflow-hidden w-full border-0 bg-transparent flex items-start p-2 pl-4 hover:bg-surface-100 dark:hover:bg-surface-800 rounded-none cursor-pointer transition-colors duration-200"
+                                >
+                                <!-- <label class="flex flex-column">
+                                    <div class="flex align-items-left font-bold">Usuario</div>
+                                    <div class="flex align-items-left text-sm">Perfil</div>
+                                </label> -->
+                                </button>
+                            </ng-template>
+                        </p-menu>
+                        <button
+                            type="button"
+                            pButton
+                            rounded
+                            iconOnly
+                            aria-label="User"
+                            (click)="menu.toggle($event)"
+                            severity="contrast"
+                        >
+                            <svg data-p-icon="user"></svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>

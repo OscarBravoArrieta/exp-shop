@@ -21,7 +21,10 @@
             "input": "apps/exp-shop-web/public"
           }
         ],
-        "styles": ["apps/exp-shop-web/src/styles.scss"],
+        "styles": [
+          "apps/exp-shop-web/src/styles.scss",
+          "node_modules/primeflex/primeflex.css"
+        ],
         "server": "apps/exp-shop-web/src/main.server.ts",
         "ssr": {
           "entry": "apps/exp-shop-web/src/server.ts"

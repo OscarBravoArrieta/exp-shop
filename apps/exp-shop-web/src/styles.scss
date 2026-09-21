@@ -1,1 +1,13 @@
 /* You can add global styles to this file, and also import other style files */
+/* You can add global styles to this file, and also import other style files */
+
+@font-face {
+    font-family: Montserrat-VariableFont_wght;
+    src: url('/font/Montserrat/Montserrat-VariableFont_wght.ttf');
+}
+// @import 'primeicons/primeicons.css';
+
+* {
+    font-family: Montserrat-VariableFont_wght;
+    font-size: small;
+}

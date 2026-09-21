@@ -1,1 +1,17 @@
-<p>layout works!</p>
+<div class="layout-wrapper">
+    <app-header />
+
+    <div class="layout-body">
+        @if (loggedIn()) {
+            <!-- only show if there is an active user -->
+            <app-left-panel />
+        }
+        <div class="layout-content-wrapper">
+            <main class="layout-content">
+                <router-outlet />
+            </main>
+
+            <app-footer />
+        </div>
+    </div>
+</div>

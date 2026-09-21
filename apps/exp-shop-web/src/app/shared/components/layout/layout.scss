@@ -1,0 +1,31 @@
+/* Contenedor principal que ocupa toda la pantalla sin scroll global */
+.layout-wrapper {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+    font-family: var(--font-family, sans-serif);
+    background-color: #f8f9fa;
+}
+
+/* CUERPO DEL LAYOUT (Sidebar + Contenido), debajo del header fijo */
+.layout-body {
+    display: flex;
+    flex: 1;
+    overflow: hidden; /* Evita scrolls raros a este nivel; el scroll vive en los hijos */
+}
+
+/* CONTENEDOR DERECHO (Une la zona central con scroll y el footer fijo) */
+.layout-content-wrapper {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    overflow: hidden;
+}
+
+/* 3. ZONA CENTRAL CON SCROLL INDEPENDIENTE */
+.layout-content {
+    flex: 1;
+    padding: 3rem;
+    overflow-y: auto; /* <-- ESTA ES LA CLAVE PARA EL SCROLL INTERNO */
+}

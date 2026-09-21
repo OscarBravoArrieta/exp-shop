@@ -6,4 +6,4 @@ import { Component } from '@angular/core';
     templateUrl: './categories-list.html',
     styleUrl: './categories-list.scss',
 })
-export class CategoriesList {}
+export default class CategoriesList {}

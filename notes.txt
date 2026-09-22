@@ -192,9 +192,10 @@ nx add @nx/storybook
 
 
 -----------------------------
+ npx nx run exp-shop-web:serve --configuration=development
  nx run exp-shop-web:serve:development
  
- npx nx run exp-shop-web:serve --configuration=development 
+ 
 
  https://primeng.dev/installation
 

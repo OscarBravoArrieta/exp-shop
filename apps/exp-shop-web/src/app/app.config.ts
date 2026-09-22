@@ -10,12 +10,14 @@ import {
 } from '@angular/platform-browser';
 import { providePrimeNG } from 'primeng/config';
 import Aura from '@primeuix/themes/aura';
+import { provideGraphQL } from './core/graphql/apollo.provider';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideClientHydration(withEventReplay()),
     provideBrowserGlobalErrorListeners(),
     provideRouter(appRoutes),
+    provideGraphQL(),
         providePrimeNG({
             theme: {
                 preset: Aura,

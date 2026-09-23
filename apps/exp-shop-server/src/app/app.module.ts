@@ -6,6 +6,7 @@ import { PrismaModule } from '@org/prisma';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AppResolver } from './app.resolver';
+import { UsersModule } from './users/users.module';
 
 @Module({
      imports: [
@@ -13,11 +14,13 @@ import { AppResolver } from './app.resolver';
          GraphQLModule.forRoot<ApolloDriverConfig>({
          driver: ApolloDriver,
          autoSchemaFile: true,
+         useGlobalPrefix: true,
          playground: false,
          plugins: [
              ApolloServerPluginLandingPageLocalDefault({})
          ],
      }),
+        UsersModule,
     ],
      controllers: [AppController],
      providers: [AppService, AppResolver],

@@ -1,5 +1,7 @@
 import {
   ApplicationConfig,
+  inject,
+  provideAppInitializer,
   provideBrowserGlobalErrorListeners,
 } from '@angular/core';
 import { provideRouter } from '@angular/router';
@@ -11,6 +13,7 @@ import {
 import { providePrimeNG } from 'primeng/config';
 import Aura from '@primeuix/themes/aura';
 import { provideGraphQL } from './core/graphql/apollo.provider';
+import { Auth } from './core/services/auth';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -18,6 +21,9 @@ export const appConfig: ApplicationConfig = {
     provideBrowserGlobalErrorListeners(),
     provideRouter(appRoutes),
     provideGraphQL(),
+    // si hay un token guardado, lo valida contra el backend antes de que la
+    // app renderice rutas protegidas (revisa Auth.checkAuthStatus)
+    provideAppInitializer(() => inject(Auth).checkAuthStatus()),
         providePrimeNG({
             theme: {
                 preset: Aura,

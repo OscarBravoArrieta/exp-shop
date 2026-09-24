@@ -1,16 +1,44 @@
 <aside class="layout-sidebar">
     <div class="menu-section">
         <span class="menu-title">MY ACCOUNT</span>
-        <ul>
-            <li routerLink="/admin-user-list" routerLinkActive="active">
-                <svg data-p-icon="users"></svg> Usuarios
-            </li>
-            <li routerLink="/admin-categories-list" routerLinkActive="active">
-                <svg data-p-icon="tablet"></svg>Categorías
-            </li>
-            <li routerLink="/admin-products-list" routerLinkActive="active">
-                <svg data-p-icon="box"></svg>Productos
-            </li>
-        </ul>
+        @if(isAdmin()){       
+            <ul>
+                <li routerLink="/admin-user-list" routerLinkActive="active">
+                    <svg data-p-icon="users"></svg> Usuarios
+                </li>
+                <li routerLink="/admin-categories-list" routerLinkActive="active">
+                    <svg data-p-icon="tablet"></svg>Categorías
+                </li>
+                <li routerLink="/admin-products-list" routerLinkActive="active">
+                    <svg data-p-icon="box"></svg>Productos
+                </li>
+            </ul>
+         }@else {
+            <span class="menu-title">Categorias</span>
+            <ul>
+                <li routerLink="/admin-user-list" routerLinkActive="active">
+                    <svg data-p-icon="users"></svg>Hogar
+                </li>
+                <li routerLink="/admin-categories-list" routerLinkActive="active">
+                    <svg data-p-icon="tablet"></svg>Mascotas
+                </li>
+                <li routerLink="/admin-products-list" routerLinkActive="active">
+                    <svg data-p-icon="box"></svg>Deportes
+                </li>
+                <li routerLink="/admin-products-list" routerLinkActive="active">
+                    <svg data-p-icon="box"></svg>Automotriz
+                </li>
+                <li routerLink="/admin-products-list" routerLinkActive="active">
+                    <svg data-p-icon="box"></svg>Alimentos
+                </li>                
+                <li routerLink="/admin-products-list" routerLinkActive="active">
+                    <svg data-p-icon="box"></svg>Electrónica
+                </li>
+                <li routerLink="/admin-products-list" routerLinkActive="active">
+                    <svg data-p-icon="box"></svg>Belleza
+                </li>                
+            </ul>
+
+         }
     </div>
 </aside>

@@ -1,9 +1,9 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { Footer } from '../footer/footer';
 import { Header } from '../header/header';
 import { LeftPanel } from '../left-panel/left-panel';
-
+import { Auth } from '../../../core/services/auth';
 
 @Component({
     selector: 'app-layout',
@@ -12,7 +12,7 @@ import { LeftPanel } from '../left-panel/left-panel';
     styleUrl: './layout.scss',
 })
 export class Layout {
-    
-    loggedIn = signal<boolean>(true);
+    private readonly auth = inject(Auth);
 
+    protected readonly loggedIn = this.auth.isAuthenticated;
 }

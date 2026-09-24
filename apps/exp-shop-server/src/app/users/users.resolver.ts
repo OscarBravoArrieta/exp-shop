@@ -43,6 +43,14 @@ export class UsersResolver {
     return this.usersService.findOne(id);
   }
 
+  @Query(() => User, { name: 'userByEmail' })
+  findOneByEmail(
+    @Args('email') email: string,
+    @CurrentUser([ValidRoles.admin, ValidRoles.superUser]) _admin: User,
+  ): Promise<User> {
+    return this.usersService.findOneByEmail(email);
+  }
+
   @Mutation(() => User, { name: 'updateUser' })
   updateUser(
     @Args('updateUserInput') updateUserInput: UpdateUserInput,

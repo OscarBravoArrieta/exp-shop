@@ -1,1 +1,100 @@
-<p>login works!</p>
+<!--
+  Estructura y estilo calcados del diseño que compartiste (panel de marca +
+  formulario, dos columnas). El texto de marca ("Atlas" / infraestructura) lo
+  adapté a Exp Shop — si lo querías literal, dime y lo dejo igual al mockup.
+-->
+<div class="login-page">
+  <aside class="login-page__brand">
+    <div class="login-page__brand-header">
+      <span class="login-page__logo" aria-hidden="true"></span>
+      <span class="login-page__brand-name">EXP SHOP</span>
+    </div>
+    <p class="login-page__tagline">Tu tienda,<br />siempre disponible.</p>
+  </aside>
+
+  <section class="login-page__panel">
+    <form class="login-form" novalidate (submit)="onSubmit($event)">
+      <h1 class="login-form__title">Login</h1>
+      <p class="login-form__subtitle">Ingresa tus datos para continuar.</p>
+
+      <!-- Botón visual: todavía no hay estrategia de Google OAuth en el backend -->
+      <button type="button" class="login-form__google" disabled title="Próximamente">
+        Continuar con Google
+      </button>
+
+      <div class="login-form__divider" aria-hidden="true"><span>o</span></div>
+
+      @if (loginError(); as message) {
+        <p-message severity="error" styleClass="login-form__error">{{ message }}</p-message>
+      }
+
+      <div class="login-form__field">
+        <input
+          pInputText
+          type="email"
+          placeholder="Email"
+          autocomplete="email"
+          [formField]="loginForm.email"
+        />
+        @if (loginForm.email().touched() && loginForm.email().invalid()) {
+          @for (error of loginForm.email().errors(); track error.message) {
+            <small class="login-form__field-error">{{ error.message }}</small>
+          }
+        }
+      </div>
+
+      <div class="login-form__field login-form__field--password">
+        <div class="login-form__password-wrapper">
+          <input
+            pInputText
+            [type]="showPassword() ? 'text' : 'password'"
+            placeholder="Contraseña"
+            autocomplete="current-password"
+            [formField]="loginForm.password"
+          />
+          <button
+            type="button"
+            class="login-form__toggle-password"
+            (click)="showPassword.set(!showPassword())"
+          >
+            {{ showPassword() ? 'Ocultar' : 'Mostrar' }}
+          </button>
+        </div>
+        @if (loginForm.password().touched() && loginForm.password().invalid()) {
+          @for (error of loginForm.password().errors(); track error.message) {
+            <small class="login-form__field-error">{{ error.message }}</small>
+          }
+        }
+      </div>
+
+      <div class="login-form__row">
+        <label class="login-form__remember">
+          <input
+            type="checkbox"
+            [checked]="rememberMe()"
+            (change)="rememberMe.set($any($event.target).checked)"
+          />
+          Recordarme
+        </label>
+        <!-- Sin flujo de recuperación de contraseña todavía -->
+        <span class="login-form__forgot" title="Próximamente">Olvidé mi contraseña</span>
+      </div>
+
+      <button pButton type="submit" [disabled]="submitting()" class="login-form__submit">
+        @if (submitting()) {
+          Ingresando...
+        } @else {
+          Entrar
+        }
+      </button>
+
+      <p class="login-form__signup">
+        ¿Aún no tienes cuenta?
+        <!-- Sin pantalla de registro todavía -->
+        <span class="login-form__signup-link" title="Próximamente">Créala ahora</span>
+      </p>
+
+      <p class="login-form__footer">©2026 Exp Shop</p>
+    </form>
+  </section>
+</div>

@@ -13,14 +13,44 @@ datasource db {
 }
 
 model User {
-  id        String @id @default(uuid())
+  id        String   @id @default(uuid())
   fullName  String
   email     String   @unique
   password  String
+  avatar    String?
   roles     String[] @default(["user"])
   isActive  Boolean  @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@map("users")
+}
+
+
+model Category {
+  id        String    @id @default(uuid())
+  name      String
+  image     String
+  slug      String    @unique
+  products  Product[] // <--- Agrega esta línea para resolver el error
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@map("categories")
+}
+
+model Product {
+  id          String    @id @default(uuid())
+  title       String
+  price       Float
+  description String
+  images      String[]  
+  slug        String    @unique
+  quantity    Int       @default(0) // Nota: corregido @default(0()) que tenía un error de sintaxis
+  categoryId  String?
+  category    Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@map("products")
 }

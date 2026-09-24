@@ -1,5 +1,6 @@
  import { Field, InputType } from '@nestjs/graphql';
- import { IsArray, IsEmail, IsOptional, IsString, MinLength } from 'class-validator';
+ import { IsArray, IsEmail, IsEnum, IsOptional, IsString, MinLength } from 'class-validator';
+ import { ValidRoles } from '../../auth/enums/valid-roles.enum';
 
  @InputType()
  export class CreateUserInput {
@@ -18,8 +19,9 @@
      @MinLength(8, { message: 'La contraseña debe tener al menos 8 caracteres' })
      password!: string; 
 
-     @Field(() => [String], { nullable: true })
+     @Field(() => [ValidRoles], { nullable: true })
      @IsOptional()
      @IsArray()
-     roles?: string[];
+     @IsEnum(ValidRoles, { each: true })
+     roles?: ValidRoles[];
 }

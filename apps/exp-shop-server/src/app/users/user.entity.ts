@@ -1,4 +1,5 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { ValidRoles } from '../auth/enums/valid-roles.enum';
 
 /**
  * Tipo de GraphQL para `User`. Deliberadamente separado del modelo de Prisma
@@ -22,7 +23,10 @@ export class User {
   @Field(() => String)
   email!: string;
 
-  @Field(() => [String])
+  @Field(() => String, { nullable: true })
+  avatar!: string | null;
+
+  @Field(() => [ValidRoles])
   roles!: string[];
 
   @Field(() => Boolean)

@@ -1,7 +1,7 @@
 <aside class="layout-sidebar">
     <div class="menu-section">
         <span class="menu-title">MY ACCOUNT</span>
-        @if(isAdmin()){       
+        @if (isAdmin()) {
             <ul>
                 <li routerLink="/admin-user-list" routerLinkActive="active">
                     <svg data-p-icon="users"></svg> Usuarios
@@ -13,7 +13,7 @@
                     <svg data-p-icon="box"></svg>Productos
                 </li>
             </ul>
-         }@else {
+        } @else {
             <span class="menu-title">Categorias</span>
             <ul>
                 <li routerLink="/admin-user-list" routerLinkActive="active">
@@ -30,15 +30,14 @@
                 </li>
                 <li routerLink="/admin-products-list" routerLinkActive="active">
                     <svg data-p-icon="box"></svg>Alimentos
-                </li>                
+                </li>
                 <li routerLink="/admin-products-list" routerLinkActive="active">
                     <svg data-p-icon="box"></svg>Electrónica
                 </li>
                 <li routerLink="/admin-products-list" routerLinkActive="active">
                     <svg data-p-icon="box"></svg>Belleza
-                </li>                
+                </li>
             </ul>
-
-         }
+        }
     </div>
 </aside>

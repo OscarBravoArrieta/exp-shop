@@ -4,20 +4,20 @@ import { PrismaClient } from '../generated/prisma/client';
 
 @Injectable()
 export class PrismaService extends PrismaClient implements OnModuleInit, OnModuleDestroy {
-  private readonly logger = new Logger(PrismaService.name);
+    private readonly logger = new Logger(PrismaService.name);
 
-  constructor() {
-    super({
-      adapter: new PrismaPg({ connectionString: process.env['DATABASE_URL'] }),
-    });
-  }
+    constructor() {
+        super({
+            adapter: new PrismaPg({ connectionString: process.env['DATABASE_URL'] }),
+        });
+    }
 
-  async onModuleInit() {
-    await this.$connect();
-    this.logger.log('Conectado a la base de datos');
-  }
+    async onModuleInit() {
+        await this.$connect();
+        this.logger.log('Conectado a la base de datos');
+    }
 
-  async onModuleDestroy() {
-    await this.$disconnect();
-  }
+    async onModuleDestroy() {
+        await this.$disconnect();
+    }
 }

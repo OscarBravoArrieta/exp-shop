@@ -5,35 +5,35 @@ export type { User } from '@exp-shop/shared/interfaces';
 export { CreateUserDto, LoginDto } from '@exp-shop/shared/interfaces';
 
 export interface UserToUpdate {
-  email: string;
-  name: string;
+    email: string;
+    name: string;
 }
 
 export interface Email {
-  email: string;
+    email: string;
 }
 
 export interface EmailIsAvailable {
-  isAvailable: boolean;
+    isAvailable: boolean;
 }
 
 export interface Token {
-  token: string;
-  refreshToken: string;
+    token: string;
+    refreshToken: string;
 }
 
 export interface AccountError {
-  field: string | null;
-  message: string | null;
-  code: string;
+    field: string | null;
+    message: string | null;
+    code: string;
 }
 
 export interface UserProfile {
-  id: string;
-  name: string;
-  avatar: string;
+    id: string;
+    name: string;
+    avatar: string;
 }
 
 export interface RegisterResult {
-  requiresConfirmation: boolean | null;
+    requiresConfirmation: boolean | null;
 }

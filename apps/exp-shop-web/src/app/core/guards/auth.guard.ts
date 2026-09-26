@@ -10,12 +10,12 @@ import { Auth } from '../services/auth';
  * en su estado intermedio 'checking'.
  */
 export const authGuard: CanActivateFn = () => {
-  const auth = inject(Auth);
-  const router = inject(Router);
+    const auth = inject(Auth);
+    const router = inject(Router);
 
-  if (auth.isAuthenticated()) {
-    return true;
-  }
+    if (auth.isAuthenticated()) {
+        return true;
+    }
 
-  return router.createUrlTree(['/auth-login']);
+    return router.createUrlTree(['/auth-login']);
 };

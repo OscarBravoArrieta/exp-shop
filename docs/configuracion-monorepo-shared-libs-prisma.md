@@ -18,14 +18,14 @@ El workspace es un monorepo Nx **integrado** (un solo `package.json`/`node_modul
 
 ## 2. Estructura de proyectos y tags
 
-| Proyecto | Tipo | Tags | Propósito |
-|---|---|---|---|
-| `apps/exp-shop-server` | app | `scope:backend`, `type:app` | API NestJS |
-| `apps/exp-shop-web` | app | `scope:frontend`, `type:app` | SPA Angular (SSR) |
-| `libs/shared/interfaces` | lib | `scope:shared`, `type:util` | Interfaces, modelos y DTOs (`class-validator`) compartidos por ambas apps |
-| `libs/shared/utils` | lib | `scope:shared`, `type:util` | Utilidades JS puras compartidas |
-| `libs/shared/ui` | lib | `scope:frontend`, `type:ui` | Componentes Angular reutilizables (solo frontend) |
-| `libs/backend/prisma` | lib | `scope:backend`, `type:util` | Prisma ORM: schema, migraciones, cliente generado, `PrismaService` |
+| Proyecto                 | Tipo | Tags                         | Propósito                                                                 |
+| ------------------------ | ---- | ---------------------------- | ------------------------------------------------------------------------- |
+| `apps/exp-shop-server`   | app  | `scope:backend`, `type:app`  | API NestJS                                                                |
+| `apps/exp-shop-web`      | app  | `scope:frontend`, `type:app` | SPA Angular (SSR)                                                         |
+| `libs/shared/interfaces` | lib  | `scope:shared`, `type:util`  | Interfaces, modelos y DTOs (`class-validator`) compartidos por ambas apps |
+| `libs/shared/utils`      | lib  | `scope:shared`, `type:util`  | Utilidades JS puras compartidas                                           |
+| `libs/shared/ui`         | lib  | `scope:frontend`, `type:ui`  | Componentes Angular reutilizables (solo frontend)                         |
+| `libs/backend/prisma`    | lib  | `scope:backend`, `type:util` | Prisma ORM: schema, migraciones, cliente generado, `PrismaService`        |
 
 La regla `@nx/enforce-module-boundaries` (en `eslint.config.mjs`) usa estos tags para impedir, por ejemplo, que `exp-shop-web` (scope:frontend) importe `libs/backend/prisma` (scope:backend) — evita que el cliente de Prisma (que requiere Node y no corre en navegador) termine empaquetado en el bundle de Angular.
 
@@ -33,7 +33,7 @@ La regla `@nx/enforce-module-boundaries` (en `eslint.config.mjs`) usa estos tags
 
 ## 3. Corrección de las rutas (`paths`) en `tsconfig.base.json`
 
-**Problema encontrado:** los `paths` de `interfaces` y `utils` estaban mal escritos — usaban una clave terminada en `/` sin `*`, que en TypeScript solo hace *match* exacto de esa cadena literal, nunca de subrutas. En la práctica, **no se podía importar `@exp-shop/shared/interfaces` desde ningún proyecto**.
+**Problema encontrado:** los `paths` de `interfaces` y `utils` estaban mal escritos — usaban una clave terminada en `/` sin `*`, que en TypeScript solo hace _match_ exacto de esa cadena literal, nunca de subrutas. En la práctica, **no se podía importar `@exp-shop/shared/interfaces` desde ningún proyecto**.
 
 **Corrección aplicada** (wildcards reales + entrada de barril):
 
@@ -67,8 +67,8 @@ TypeScript, con `composite: true` a nivel base, exige que cualquier proyecto que
 - **`module: "commonjs"` chocando con `moduleResolution: "nodenext"`** (heredado del base) en `libs/shared/interfaces/tsconfig.json`, `libs/shared/utils/tsconfig.json` y `libs/backend/prisma/tsconfig.json` (TS5110). Se quitó el override para heredar `nodenext` correctamente.
 - **Faltaba `declaration: true`** en `apps/exp-shop-server/tsconfig.app.json` y `apps/exp-shop-web/tsconfig.spec.json` (TS6304 "Composite projects may not disable declaration emit").
 - **Faltaban `references`** de las apps hacia las libs compartidas que consumen. Se agregaron en:
-  - `apps/exp-shop-server/tsconfig.app.json` → `libs/shared/interfaces`, `libs/backend/prisma`
-  - `apps/exp-shop-web/tsconfig.app.json` y `tsconfig.spec.json` → `libs/shared/interfaces`, `libs/shared/utils`, `libs/shared/ui`
+    - `apps/exp-shop-server/tsconfig.app.json` → `libs/shared/interfaces`, `libs/backend/prisma`
+    - `apps/exp-shop-web/tsconfig.app.json` y `tsconfig.spec.json` → `libs/shared/interfaces`, `libs/shared/utils`, `libs/shared/ui`
 - **`rootDir` de las apps** apuntando a la raíz del workspace (`../..` / `../../..` según la profundidad), tal como ya intuías en `notes.txt` — necesario para que TS acepte archivos fuente de otro proyecto composite dentro del mismo programa de compilación.
 - **Colisión de caché de build**: las libs y apps compartían literalmente la misma carpeta `dist/out-tsc` sin subcarpeta por proyecto, así que sus `.tsbuildinfo` y `.d.ts` (p. ej. `index.d.ts`) se pisaban entre sí. Con `rootDir` apuntando a la raíz del repo en cada proyecto, cada uno ahora emite a su propia subruta (`dist/out-tsc/libs/shared/interfaces/...`, `dist/out-tsc/libs/backend/prisma/...`, etc.).
 - `libs/shared/ui/tsconfig.lib.json` tenía `inlineSources: true` sin `sourceMap: true` (TS5051) — corregido.
@@ -97,6 +97,7 @@ Patrón a seguir para nuevos contratos: definir el modelo/DTO en `libs/shared/in
 ## 6. Fix del build de Angular (`NG4006` / `TS5069`)
 
 **Síntoma:** `nx serve exp-shop-web` fallaba con:
+
 ```
 NG4006: TS compiler option "emitDeclarationOnly" is not supported.
 TS5069: Option 'emitDeclarationOnly' cannot be specified without specifying option 'declaration' or option 'composite'.
@@ -126,21 +127,22 @@ devDependencies: prisma@7.10.0, @types/pg
 ### 7.3 `prisma.config.ts` (raíz del repo)
 
 ```ts
-import "dotenv/config";
-import { defineConfig, env } from "prisma/config";
+import 'dotenv/config';
+import { defineConfig, env } from 'prisma/config';
 
 export default defineConfig({
-  schema: "libs/backend/prisma/src/lib/schema.prisma",
-  migrations: {
-    path: "libs/backend/prisma/src/lib/migrations",
-  },
-  datasource: {
-    url: env("DATABASE_URL"),
-  },
+    schema: 'libs/backend/prisma/src/lib/schema.prisma',
+    migrations: {
+        path: 'libs/backend/prisma/src/lib/migrations',
+    },
+    datasource: {
+        url: env('DATABASE_URL'),
+    },
 });
 ```
 
 Puntos clave que causaron confusión y quedaron resueltos:
+
 - El archivo **debe llamarse exactamente `prisma.config.ts`** en la raíz (no `prisma7.config.ts` ni ningún otro nombre) — es lo único que el CLI de Prisma autodetecta.
 - `schema` y `migrations.path` son **rutas de sistema de archivos reales**, relativas a la raíz del repo — no son alias de TypeScript (`@org/prisma` de `tsconfig.base.json` solo lo entienden `tsc`/los bundlers al compilar código de aplicación; el CLI de Prisma carga este archivo con su propio loader, ajeno a esos `paths`).
 - `datasource.url = env("DATABASE_URL")` sí es correcto tal cual — el CLI (`migrate`, `db push`, etc.) lo usa para sus propias operaciones aunque el `PrismaClient` de la app se conecte vía el driver adapter.
@@ -167,11 +169,15 @@ datasource db {
 ```ts
 @Injectable()
 export class PrismaService extends PrismaClient implements OnModuleInit, OnModuleDestroy {
-  constructor() {
-    super({ adapter: new PrismaPg({ connectionString: process.env['DATABASE_URL'] }) });
-  }
-  async onModuleInit() { await this.$connect(); }
-  async onModuleDestroy() { await this.$disconnect(); }
+    constructor() {
+        super({ adapter: new PrismaPg({ connectionString: process.env['DATABASE_URL'] }) });
+    }
+    async onModuleInit() {
+        await this.$connect();
+    }
+    async onModuleDestroy() {
+        await this.$disconnect();
+    }
 }
 ```
 
@@ -211,15 +217,17 @@ Se confirmó vía `git log` que el `.env` nunca llegó a commitearse.
 ## 9. Entorno: `NX Failed to process project graph` (`@nx/playwright/plugin` worker exited unexpectedly)
 
 **Síntoma:** cualquier comando `nx` (`serve`, `g`, `build`, etc.) falla con:
+
 ```
 NX   Failed to process project graph.
 An error occurred while processing files for the @nx/playwright/plugin plugin (Defined at nx.json#plugins[2]).
   - Plugin worker "@nx/playwright/plugin" exited unexpectedly.
 ```
 
-**Causa:** Nx aísla cada plugin (incluido `@nx/playwright`) en un subproceso propio, comunicándose por un named pipe de Windows. En esta máquina ese subproceso falla al abrir su pipe (probablemente interferencia de antivirus/EDR con sockets de child processes) — y como el aislamiento aplica a todo el project graph, bloquea *cualquier* comando `nx`, no solo los relacionados con e2e/Playwright.
+**Causa:** Nx aísla cada plugin (incluido `@nx/playwright`) en un subproceso propio, comunicándose por un named pipe de Windows. En esta máquina ese subproceso falla al abrir su pipe (probablemente interferencia de antivirus/EDR con sockets de child processes) — y como el aislamiento aplica a todo el project graph, bloquea _cualquier_ comando `nx`, no solo los relacionados con e2e/Playwright.
 
 **Solución permanente:**
+
 1. Variable de entorno de **usuario** en Windows: `NX_ISOLATE_PLUGINS=false` (exacto en minúsculas — Nx compara el string literal `'false'`). Configuración → Variables de entorno → Variables de usuario → Nueva. Requiere cerrar **todas** las ventanas de la app que abre la terminal (VS Code incluido) y volver a abrirla — un cambio de variable de entorno del sistema no llega a procesos ya corriendo.
 2. Si el error persiste con la variable ya confirmada (`$env:NX_ISOLATE_PLUGINS` la imprime en `false`), es porque el **daemon de Nx** — un proceso de fondo que sobrevive al cierre de la terminal — quedó arrancado desde antes de que la variable existiera. Un solo `npx nx daemon --stop` lo mata; el próximo comando levanta un daemon nuevo que sí hereda la variable correcta. No debería hacer falta repetirlo salvo que la variable de entorno cambie de nuevo.
 
@@ -235,4 +243,4 @@ An error occurred while processing files for the @nx/playwright/plugin plugin (D
 
 ## 11. Archivos de "skills" de agentes de IA (`.agents/`, `.claude/skills/`, `.cursor/`, `.github/instructions/`, `.opencode/`)
 
-Son paquetes de **documentación de referencia** que asistentes de IA (Claude Code, Cursor, Copilot, opencode, Windsurf) cargan para responder con la sintaxis/CLI/API *actual* de una herramienta (en este caso, Prisma y Nx) en lugar de depender solo de conocimiento entrenado, que puede estar desactualizado. Se instalaron automáticamente al invocar por primera vez ayuda especializada de Prisma en esta sesión. No son código de la aplicación — son intercambiables entre editores/asistentes, por eso aparecen replicados en varias carpetas (una por herramienta). `skills-lock.json` fija qué versión de cada skill quedó instalada. Queda a tu criterio si los versionas (para que cualquier compañero que abra el repo con estas herramientas tenga el mismo contexto) o los agregas a `.gitignore` como tooling local.
+Son paquetes de **documentación de referencia** que asistentes de IA (Claude Code, Cursor, Copilot, opencode, Windsurf) cargan para responder con la sintaxis/CLI/API _actual_ de una herramienta (en este caso, Prisma y Nx) en lugar de depender solo de conocimiento entrenado, que puede estar desactualizado. Se instalaron automáticamente al invocar por primera vez ayuda especializada de Prisma en esta sesión. No son código de la aplicación — son intercambiables entre editores/asistentes, por eso aparecen replicados en varias carpetas (una por herramienta). `skills-lock.json` fija qué versión de cada skill quedó instalada. Queda a tu criterio si los versionas (para que cualquier compañero que abra el repo con estas herramientas tenga el mismo contexto) o los agregas a `.gitignore` como tooling local.

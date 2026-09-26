@@ -13,24 +13,22 @@ import { CategoriesModule } from './categories/categories.module';
 import { ProductsModule } from './products/products.module';
 
 @Module({
-     imports: [
-         ConfigModule.forRoot(),
-         PrismaModule,
-         GraphQLModule.forRoot<ApolloDriverConfig>({
-         driver: ApolloDriver,
-         autoSchemaFile: true,
-         useGlobalPrefix: true,
-         playground: false,
-         plugins: [
-             ApolloServerPluginLandingPageLocalDefault({})
-         ],
-     }),
+    imports: [
+        ConfigModule.forRoot(),
+        PrismaModule,
+        GraphQLModule.forRoot<ApolloDriverConfig>({
+            driver: ApolloDriver,
+            autoSchemaFile: true,
+            useGlobalPrefix: true,
+            playground: false,
+            plugins: [ApolloServerPluginLandingPageLocalDefault({})],
+        }),
         UsersModule,
         AuthModule,
         CategoriesModule,
         ProductsModule,
     ],
-     controllers: [AppController],
-     providers: [AppService, AppResolver],
- })
- export class AppModule {}
+    controllers: [AppController],
+    providers: [AppService, AppResolver],
+})
+export class AppModule {}

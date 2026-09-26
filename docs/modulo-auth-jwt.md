@@ -78,6 +78,7 @@ node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"
 ### 4.2 `ValidRoles` ahora se usa de punta a punta
 
 El enum (idéntico en valores al de `nest-anylist`: `admin`, `user`, `superUser`) se conectó en los tres puntos donde importa:
+
 - **Entrada**: `CreateUserInput.roles` valida con `@IsEnum(ValidRoles, { each: true })` — ya no se puede mandar un string arbitrario como rol.
 - **Salida**: `User.roles` en GraphQL tipa `[ValidRoles]` — el schema documenta los valores posibles, no un `[String]` genérico.
 - **Autorización**: `@CurrentUser([ValidRoles.admin])` en los resolvers.
@@ -88,13 +89,13 @@ Prisma sigue guardando `roles` como `String[]` a nivel de columna (no hay enum n
 
 `UsersResolver` tiene `@UseGuards(JwtAuthGuard)` a nivel de clase (nada funciona sin un JWT válido), y encima cada método exige un rol puntual:
 
-| Operación | Rol requerido |
-|---|---|
-| `users` (listar) | `admin` |
+| Operación           | Rol requerido         |
+| ------------------- | --------------------- |
+| `users` (listar)    | `admin`               |
 | `user` (uno por id) | `admin` o `superUser` |
-| `createUser` | `admin` |
-| `updateUser` | `admin` |
-| `removeUser` | `admin` |
+| `createUser`        | `admin`               |
+| `updateUser`        | `admin`               |
+| `removeUser`        | `admin`               |
 
 `AuthResolver`: `signup` y `login` son públicas (tienen que serlo). `revalidate` exige JWT válido pero **ningún rol específico** — cualquier usuario autenticado puede renovar su propio token.
 
@@ -110,18 +111,18 @@ No implementé autorización "el usuario puede editar su propio perfil sin ser a
 
 ```graphql
 type Mutation {
-  signup(signupInput: SignupInput!): AuthResponse!
-  login(loginInput: LoginInput!): AuthResponse!
-  createUser(createUserInput: CreateUserInput!): User!    # admin
-  updateUser(updateUserInput: UpdateUserInput!): User!    # admin
-  removeUser(id: ID!): User!                              # admin
+    signup(signupInput: SignupInput!): AuthResponse!
+    login(loginInput: LoginInput!): AuthResponse!
+    createUser(createUserInput: CreateUserInput!): User! # admin
+    updateUser(updateUserInput: UpdateUserInput!): User! # admin
+    removeUser(id: ID!): User! # admin
 }
 
 type Query {
-  revalidate: AuthResponse!                               # cualquier usuario autenticado
-  profile: User!                                          # cualquier usuario autenticado
-  users(roles: [ValidRoles!]): [User!]!                   # admin
-  user(id: ID!): User!                                    # admin o superUser
+    revalidate: AuthResponse! # cualquier usuario autenticado
+    profile: User! # cualquier usuario autenticado
+    users(roles: [ValidRoles!]): [User!]! # admin
+    user(id: ID!): User! # admin o superUser
 }
 ```
 
@@ -131,7 +132,7 @@ Uso típico: `signup`/`login` devuelven `{ token, user }`; el `token` va en cada
 
 Agregada en `AuthResolver`/`AuthService` (`getProfile`). Igual que `revalidate`, no exige ningún rol puntual — solo un JWT válido — porque cualquier usuario autenticado puede ver su propio perfil. No hace ninguna consulta extra a la base: el objeto `User` que entrega `@CurrentUser()` ya viene fresco de `JwtStrategy` (§4.4), así que `getProfile` es un simple passthrough.
 
-De paso se expuso `avatar` en el `User` de GraphQL (`user.entity.ts`) — existía en la tabla desde la migración `add_user_avatar`, pero no estaba declarado como `@Field()` todavía, así que no era visible por ninguna query. Ahora `profile`, `users`, `user`, y el `user` dentro de `AuthResponse` (`signup`/`login`/`revalidate`) devuelven `avatar` (nullable). **`createUser`/`updateUser` todavía no permiten *establecer* el avatar** — solo se puede leer por ahora; escribirlo (típicamente después de subir una imagen) queda pendiente.
+De paso se expuso `avatar` en el `User` de GraphQL (`user.entity.ts`) — existía en la tabla desde la migración `add_user_avatar`, pero no estaba declarado como `@Field()` todavía, así que no era visible por ninguna query. Ahora `profile`, `users`, `user`, y el `user` dentro de `AuthResponse` (`signup`/`login`/`revalidate`) devuelven `avatar` (nullable). **`createUser`/`updateUser` todavía no permiten _establecer_ el avatar** — solo se puede leer por ahora; escribirlo (típicamente después de subir una imagen) queda pendiente.
 
 ---
 

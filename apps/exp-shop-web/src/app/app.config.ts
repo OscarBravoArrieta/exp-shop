@@ -1,29 +1,26 @@
 import {
-  ApplicationConfig,
-  inject,
-  provideAppInitializer,
-  provideBrowserGlobalErrorListeners,
+    ApplicationConfig,
+    inject,
+    provideAppInitializer,
+    provideBrowserGlobalErrorListeners,
 } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { appRoutes } from './app.routes';
-import {
-  provideClientHydration,
-  withEventReplay,
-} from '@angular/platform-browser';
+import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
 import { providePrimeNG } from 'primeng/config';
 import Aura from '@primeuix/themes/aura';
 import { provideGraphQL } from './core/graphql/apollo.provider';
 import { Auth } from './core/services/auth';
 
 export const appConfig: ApplicationConfig = {
-  providers: [
-    provideClientHydration(withEventReplay()),
-    provideBrowserGlobalErrorListeners(),
-    provideRouter(appRoutes),
-    provideGraphQL(),
-    // si hay un token guardado, lo valida contra el backend antes de que la
-    // app renderice rutas protegidas (revisa Auth.checkAuthStatus)
-    provideAppInitializer(() => inject(Auth).checkAuthStatus()),
+    providers: [
+        provideClientHydration(withEventReplay()),
+        provideBrowserGlobalErrorListeners(),
+        provideRouter(appRoutes),
+        provideGraphQL(),
+        // si hay un token guardado, lo valida contra el backend antes de que la
+        // app renderice rutas protegidas (revisa Auth.checkAuthStatus)
+        provideAppInitializer(() => inject(Auth).checkAuthStatus()),
         providePrimeNG({
             theme: {
                 preset: Aura,
@@ -36,6 +33,6 @@ export const appConfig: ApplicationConfig = {
             },
             license:
                 'eyJpZCI6ImIwYjIwNDQ1LTlmODctNDJkMS04MjgzLTEwMmViOWQ3ZjVlMSIsInByb2R1Y3QiOiJwcmltZXVpIiwidGllciI6ImNvbW11bml0eSIsInR5cGUiOiJkZXYiLCJpYXQiOjE3ODc1MjkxNzcsImV4cCI6MTgxOTA2NTE3N30.jKu-Gt7tFQEoT3qSPvxrI_tR0Xg8GbM_LjF7I6Gd7OXTWNKzPnLT8XHCndWwI3nDypOWaiB-qAN7DWo1t3FtBw',
-        }),    
-  ],
+        }),
+    ],
 };

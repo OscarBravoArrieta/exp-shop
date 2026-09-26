@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
 
 @Injectable({ providedIn: 'root' })
-export class Categories {
-}
+export class Categories {}

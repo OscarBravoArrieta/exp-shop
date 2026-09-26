@@ -13,5 +13,7 @@ export class LeftPanel {
     private readonly auth = inject(Auth);
 
     /** Admin ve el panel de administración; cualquier otro usuario ve categorías. */
-    protected readonly isAdmin = computed(() => this.auth.currentUser()?.roles.includes('admin') ?? false);
+    protected readonly isAdmin = computed(
+        () => this.auth.currentUser()?.roles.includes('admin') ?? false
+    );
 }

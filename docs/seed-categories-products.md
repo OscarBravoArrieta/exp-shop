@@ -12,7 +12,7 @@ npx prisma db seed
 
 Esto ejecuta `libs/backend/prisma/src/lib/seed.ts` vía `tsx` (configurado en `prisma.config.ts` → `migrations.seed`). También se dispara automáticamente después de `prisma migrate reset`.
 
-**⚠️ Es destructivo, a propósito, solo para `categories`/`products`:** el script empieza borrando *todo* lo que haya en esas dos tablas (`deleteMany()`) antes de insertar los datos nuevos — así es idempotente, correrlo dos veces da el mismo resultado, no acumula basura. **No toca la tabla `users`** en absoluto.
+**⚠️ Es destructivo, a propósito, solo para `categories`/`products`:** el script empieza borrando _todo_ lo que haya en esas dos tablas (`deleteMany()`) antes de insertar los datos nuevos — así es idempotente, correrlo dos veces da el mismo resultado, no acumula basura. **No toca la tabla `users`** en absoluto.
 
 ---
 
@@ -20,10 +20,10 @@ Esto ejecuta `libs/backend/prisma/src/lib/seed.ts` vía `tsx` (configurado en `p
 
 - **10 categorías** con nombres curados (Electrónica, Ropa, Hogar, Deportes, Juguetes, Libros, Belleza, Alimentos, Mascotas, Automotriz) — no aleatorios, para que el catálogo demo se vea como una tienda real. Cada una con su `image` de Picsum.
 - **200 productos**, repartidos aleatoriamente entre esas 10 categorías (`faker.helpers.arrayElement`), cada uno con:
-  - `title`/`description` de `faker.commerce`
-  - `price` entre 5 y 500
-  - `quantity` entre 0 y 200
-  - `images`: array de **4** URLs de Picsum
+    - `title`/`description` de `faker.commerce`
+    - `price` entre 5 y 500
+    - `quantity` entre 0 y 200
+    - `images`: array de **4** URLs de Picsum
 
 ### Imágenes: Picsum con seed determinístico
 
@@ -46,6 +46,7 @@ Al levantar `nx serve exp-shop-server` después de crear el seed, `nx build pris
 **Causa:** `seed.ts` vive dentro de `libs/backend/prisma/src/lib/`, y `tsconfig.lib.json` de esa librería incluye `src/**/*.ts` — o sea, el seed pasó a formar parte del build **estricto y tipado** de la librería `prisma` (el mismo que corre `nx build`/`nx serve` de verdad), no solo de la ejecución vía `tsx` (que no tipa, solo transpila y por eso `npx prisma db seed` sí había funcionado antes de notar esto).
 
 **Arreglo doble:**
+
 1. Se corrigió el error real: `const categories: Category[] = [];` (tipo explícito).
 2. Se excluyó `seed.ts` del build de la librería (`tsconfig.lib.json` → `"exclude": ["src/lib/seed.ts"]`) — es un script de una sola vez, no parte de la API que exporta `@org/prisma`. Así, un futuro error de tipeo en el seed nunca vuelve a bloquear el build real de la app.
 

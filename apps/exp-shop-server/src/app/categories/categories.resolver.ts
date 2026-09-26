@@ -17,47 +17,47 @@ import { User } from '../users/user.entity';
  */
 @Resolver(() => Category)
 export class CategoriesResolver {
-  constructor(private readonly categoriesService: CategoriesService) {}
+    constructor(private readonly categoriesService: CategoriesService) {}
 
-  @Query(() => [Category], { name: 'categories' })
-  findAll(): Promise<Category[]> {
-    return this.categoriesService.findAll();
-  }
+    @Query(() => [Category], { name: 'categories' })
+    findAll(): Promise<Category[]> {
+        return this.categoriesService.findAll();
+    }
 
-  @Query(() => Category, { name: 'category' })
-  findOne(@Args('id', { type: () => ID }) id: string): Promise<Category> {
-    return this.categoriesService.findOne(id);
-  }
+    @Query(() => Category, { name: 'category' })
+    findOne(@Args('id', { type: () => ID }) id: string): Promise<Category> {
+        return this.categoriesService.findOne(id);
+    }
 
-  @Mutation(() => Category, { name: 'createCategory' })
-  @UseGuards(JwtAuthGuard)
-  createCategory(
-    @Args('createCategoryInput') createCategoryInput: CreateCategoryInput,
-    @CurrentUser([ValidRoles.admin]) _admin: User,
-  ): Promise<Category> {
-    return this.categoriesService.create(createCategoryInput);
-  }
+    @Mutation(() => Category, { name: 'createCategory' })
+    @UseGuards(JwtAuthGuard)
+    createCategory(
+        @Args('createCategoryInput') createCategoryInput: CreateCategoryInput,
+        @CurrentUser([ValidRoles.admin]) _admin: User
+    ): Promise<Category> {
+        return this.categoriesService.create(createCategoryInput);
+    }
 
-  @Mutation(() => Category, { name: 'updateCategory' })
-  @UseGuards(JwtAuthGuard)
-  updateCategory(
-    @Args('updateCategoryInput') updateCategoryInput: UpdateCategoryInput,
-    @CurrentUser([ValidRoles.admin]) _admin: User,
-  ): Promise<Category> {
-    return this.categoriesService.update(updateCategoryInput.id, updateCategoryInput);
-  }
+    @Mutation(() => Category, { name: 'updateCategory' })
+    @UseGuards(JwtAuthGuard)
+    updateCategory(
+        @Args('updateCategoryInput') updateCategoryInput: UpdateCategoryInput,
+        @CurrentUser([ValidRoles.admin]) _admin: User
+    ): Promise<Category> {
+        return this.categoriesService.update(updateCategoryInput.id, updateCategoryInput);
+    }
 
-  @Mutation(() => Category, { name: 'removeCategory' })
-  @UseGuards(JwtAuthGuard)
-  removeCategory(
-    @Args('id', { type: () => ID }) id: string,
-    @CurrentUser([ValidRoles.admin]) _admin: User,
-  ): Promise<Category> {
-    return this.categoriesService.remove(id);
-  }
+    @Mutation(() => Category, { name: 'removeCategory' })
+    @UseGuards(JwtAuthGuard)
+    removeCategory(
+        @Args('id', { type: () => ID }) id: string,
+        @CurrentUser([ValidRoles.admin]) _admin: User
+    ): Promise<Category> {
+        return this.categoriesService.remove(id);
+    }
 
-  @ResolveField(() => [Product])
-  products(@Parent() category: Category): Promise<Product[]> {
-    return this.categoriesService.findProductsByCategory(category.id);
-  }
+    @ResolveField(() => [Product])
+    products(@Parent() category: Category): Promise<Product[]> {
+        return this.categoriesService.findProductsByCategory(category.id);
+    }
 }

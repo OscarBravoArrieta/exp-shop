@@ -1,31 +1,29 @@
 {
-  "extends": "../../tsconfig.base.json",
-  "compilerOptions": {    
-    "noPropertyAccessFromIndexSignature": true,
-    "experimentalDecorators": true,
-    "moduleResolution": "bundler",
-    "module": "preserve",
-    "outDir": "../../dist/out-tsc",
-    "types": ["node"],
-    "target": "es2022",
-    "emitDeclarationOnly": false
-  },
-  "angularCompilerOptions": {
-    "enableI18nLegacyMessageIdFormat": false,
-    "strictInjectionParameters": true,
-    "strictInputAccessModifiers": true,
-    "strictTemplates": true
-  },
-  "files": [
-
-  ],
-  "include": [],
-  "references": [
-    {
-      "path": "./tsconfig.app.json"
+    "extends": "../../tsconfig.base.json",
+    "compilerOptions": {
+        "noPropertyAccessFromIndexSignature": true,
+        "experimentalDecorators": true,
+        "moduleResolution": "bundler",
+        "module": "preserve",
+        "outDir": "../../dist/out-tsc",
+        "types": ["node"],
+        "target": "es2022",
+        "emitDeclarationOnly": false
     },
-    {
-      "path": "./tsconfig.spec.json"
-    }
-  ]
+    "angularCompilerOptions": {
+        "enableI18nLegacyMessageIdFormat": false,
+        "strictInjectionParameters": true,
+        "strictInputAccessModifiers": true,
+        "strictTemplates": true
+    },
+    "files": [],
+    "include": [],
+    "references": [
+        {
+            "path": "./tsconfig.app.json"
+        },
+        {
+            "path": "./tsconfig.spec.json"
+        }
+    ]
 }

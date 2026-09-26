@@ -49,11 +49,11 @@ Los tres servicios (`users`, `categories`, `products`) ahora usan la misma funci
 
 `UsersResolver` protege **todo** (tiene sentido: la lista de usuarios no es un dato público). Para `categories`/`products` eso no tendría sentido — es el catálogo de una tienda, se supone que cualquiera lo navega sin loguearse. Por eso:
 
-| Operación | Guard |
-|---|---|
-| `categories`, `category`, `products`, `product` | **Ninguno** — públicas |
+| Operación                                            | Guard                                                           |
+| ---------------------------------------------------- | --------------------------------------------------------------- |
+| `categories`, `category`, `products`, `product`      | **Ninguno** — públicas                                          |
 | `createCategory`, `updateCategory`, `removeCategory` | `@UseGuards(JwtAuthGuard)` + `@CurrentUser([ValidRoles.admin])` |
-| `createProduct`, `updateProduct`, `removeProduct` | `@UseGuards(JwtAuthGuard)` + `@CurrentUser([ValidRoles.admin])` |
+| `createProduct`, `updateProduct`, `removeProduct`    | `@UseGuards(JwtAuthGuard)` + `@CurrentUser([ValidRoles.admin])` |
 
 A diferencia de `UsersResolver` (guard a nivel de **clase**), acá el `@UseGuards(JwtAuthGuard)` va **por método**, solo en las mutations — si se pusiera a nivel de clase, las queries de lectura también quedarían bloqueadas.
 
@@ -82,7 +82,7 @@ products(@Parent() category: Category) {
 
 **Decisión clave para evitar una dependencia circular de módulos:** `ProductsService.findCategoryOf` consulta `this.prisma.category` directamente (no inyecta `CategoriesService`), y viceversa. Si en cambio `ProductsModule` importara `CategoriesModule` para inyectar `CategoriesService` (y `CategoriesModule` hiciera lo mismo al revés para `products`), sería una dependencia circular de módulos de Nest — resoluble con `forwardRef()`, pero innecesario acá: como `PrismaService` ya es global y unifica todos los modelos, cada servicio puede tocar cualquier tabla sin necesitar el servicio del otro módulo. `CategoriesModule` y `ProductsModule` no se importan entre sí.
 
-Las dos entidades (`category.entity.ts` y `product.entity.ts`) también se importan una a la otra (`Category` referencia `Product` y viceversa) — esto funciona sin problema porque `@Field(() => Product)` es un *thunk* (una función, no la clase directamente): no se ejecuta hasta que se leen los metadatos de GraphQL, momento en el que ambos módulos ya están completamente cargados. Es el patrón estándar de NestJS+GraphQL para relaciones bidireccionales.
+Las dos entidades (`category.entity.ts` y `product.entity.ts`) también se importan una a la otra (`Category` referencia `Product` y viceversa) — esto funciona sin problema porque `@Field(() => Product)` es un _thunk_ (una función, no la clase directamente): no se ejecuta hasta que se leen los metadatos de GraphQL, momento en el que ambos módulos ya están completamente cargados. Es el patrón estándar de NestJS+GraphQL para relaciones bidireccionales.
 
 ---
 

@@ -1,15 +1,12 @@
-
-<div class="content" style="width: 100%; height: 100%;">
+<div class="content" style="width: 100%; height: 100%">
     <h1>Administración de productos</h1>
     <!-- ag-grid-angular usa `window` sin protección para SSR: se difiere para que
          solo se construya en el navegador, nunca durante el render del servidor. -->
     @defer (on immediate) {
-        <ag-grid-angular
-        style="width: 100%; height: 100%;"
-        [rowData]="rowData"
-        [columnDefs]="colDefs"
-        [defaultColDef]="defaultColDef"
-        />
+        <app-data-viewer-template>
+            
+        </app-data-viewer-template>
+
     } @placeholder {
         <div>Cargando tabla...</div>
     }

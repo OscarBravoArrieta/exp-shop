@@ -8,31 +8,31 @@
 
 ### `auth/`
 
-| Archivo | Rol |
-|---|---|
-| `auth.module.ts` | Ensambla el módulo: registra Passport, JWT y expone `AuthService`/`JwtStrategy` |
-| `auth.resolver.ts` | Puerta de entrada GraphQL: `signup`, `login`, `revalidate` |
-| `auth.service.ts` | Lógica de negocio: crear token, verificar password, validar usuario |
-| `decorators/curren-user.decorator.ts` | Decorador custom `@CurrentUser()` — saca el usuario autenticado del request |
-| `dto/inputs/login.input.ts` | `InputType` GraphQL para el mutation `login` |
-| `dto/inputs/signup.input.ts` | `InputType` GraphQL para el mutation `signup` |
-| `enums/valid-roles.enums.ts` | Enum de roles (`admin`, `user`, `superUser`), registrado como enum de GraphQL |
-| `guards/jwt-auth.guard.ts` | Guard que activa la estrategia `'jwt'` de Passport, adaptado a GraphQL |
-| `interfaces/jwt-payload.interface.ts` | Forma del payload que va **dentro** del JWT |
-| `strategies/jwt.strategy.ts` | Define cómo se valida un JWT entrante (Passport) |
-| `types/auth-response.type.ts` | `ObjectType` GraphQL que devuelven `signup`/`login`/`revalidate`: `{ token, user }` |
+| Archivo                               | Rol                                                                                 |
+| ------------------------------------- | ----------------------------------------------------------------------------------- |
+| `auth.module.ts`                      | Ensambla el módulo: registra Passport, JWT y expone `AuthService`/`JwtStrategy`     |
+| `auth.resolver.ts`                    | Puerta de entrada GraphQL: `signup`, `login`, `revalidate`                          |
+| `auth.service.ts`                     | Lógica de negocio: crear token, verificar password, validar usuario                 |
+| `decorators/curren-user.decorator.ts` | Decorador custom `@CurrentUser()` — saca el usuario autenticado del request         |
+| `dto/inputs/login.input.ts`           | `InputType` GraphQL para el mutation `login`                                        |
+| `dto/inputs/signup.input.ts`          | `InputType` GraphQL para el mutation `signup`                                       |
+| `enums/valid-roles.enums.ts`          | Enum de roles (`admin`, `user`, `superUser`), registrado como enum de GraphQL       |
+| `guards/jwt-auth.guard.ts`            | Guard que activa la estrategia `'jwt'` de Passport, adaptado a GraphQL              |
+| `interfaces/jwt-payload.interface.ts` | Forma del payload que va **dentro** del JWT                                         |
+| `strategies/jwt.strategy.ts`          | Define cómo se valida un JWT entrante (Passport)                                    |
+| `types/auth-response.type.ts`         | `ObjectType` GraphQL que devuelven `signup`/`login`/`revalidate`: `{ token, user }` |
 
 ### `users/`
 
-| Archivo | Rol |
-|---|---|
-| `entities/user.entity.ts` | Entidad TypeORM **y** `ObjectType` GraphQL a la vez (doble decorado) |
-| `users.module.ts` | Registra el repositorio TypeORM de `User` y expone `UsersService` |
-| `users.resolver.ts` | Queries/mutations GraphQL de usuarios, protegidas por `JwtAuthGuard` |
-| `users.service.ts` | Acceso a datos vía `Repository<User>` de TypeORM |
-| `dto/create-user.input.ts` | `InputType` (placeholder, no terminado en este proyecto) |
-| `dto/update-user.input.ts` | `InputType` que extiende el anterior con `PartialType` |
-| `dto/args/roles.arg.ts` | `ArgsType` — filtro opcional de roles para la query `users` |
+| Archivo                    | Rol                                                                  |
+| -------------------------- | -------------------------------------------------------------------- |
+| `entities/user.entity.ts`  | Entidad TypeORM **y** `ObjectType` GraphQL a la vez (doble decorado) |
+| `users.module.ts`          | Registra el repositorio TypeORM de `User` y expone `UsersService`    |
+| `users.resolver.ts`        | Queries/mutations GraphQL de usuarios, protegidas por `JwtAuthGuard` |
+| `users.service.ts`         | Acceso a datos vía `Repository<User>` de TypeORM                     |
+| `dto/create-user.input.ts` | `InputType` (placeholder, no terminado en este proyecto)             |
+| `dto/update-user.input.ts` | `InputType` que extiende el anterior con `PartialType`               |
+| `dto/args/roles.arg.ts`    | `ArgsType` — filtro opcional de roles para la query `users`          |
 
 ---
 
@@ -73,10 +73,10 @@ graph TD
     UsersService --> UserEntity["Repository&lt;User&gt;"]
 ```
 
-**Lectura en palabras** (quién *necesita* a quién para compilar/arrancar):
+**Lectura en palabras** (quién _necesita_ a quién para compilar/arrancar):
 
 - `AuthModule` **importa** `UsersModule` de forma explícita — porque `AuthService` inyecta `UsersService` en su constructor. Esto es una dependencia de módulo real y directa.
-- `UsersModule` **no** importa `AuthModule** en ningún momento. Sin embargo, `UsersResolver` sí usa `JwtAuthGuard` y `@CurrentUser()`, que viven físicamente dentro de la carpeta `auth/`. Esto funciona porque son **imports directos de archivo/clase de TypeScript**, no imports de módulo de Nest — `JwtAuthGuard` no tiene ninguna dependencia inyectada por Nest (solo extiende `AuthGuard('jwt')`), así que Nest no necesita que `AuthModule` esté "importado" por `UsersModule` para poder instanciarlo.
+- `UsersModule` **no** importa `AuthModule** en ningún momento. Sin embargo, `UsersResolver`sí usa`JwtAuthGuard`y`@CurrentUser()`, que viven físicamente dentro de la carpeta `auth/`. Esto funciona porque son **imports directos de archivo/clase de TypeScript**, no imports de módulo de Nest — `JwtAuthGuard`no tiene ninguna dependencia inyectada por Nest (solo extiende`AuthGuard('jwt')`), así que Nest no necesita que `AuthModule`esté "importado" por`UsersModule` para poder instanciarlo.
 - Lo que sí es **obligatorio** para que `JwtAuthGuard` funcione en tiempo de ejecución es que la estrategia `'jwt'` de Passport haya sido **registrada** — y eso ocurre como efecto colateral de que Nest construya `JwtStrategy` al menos una vez (Passport mantiene su propio registro global de estrategias, independiente del árbol de módulos de Nest). Como `AppModule` importa tanto `AuthModule` como `UsersModule`, `JwtStrategy` se construye igual, y todo funciona — pero es una dependencia **implícita y frágil**: si algún día `AuthModule` dejara de cargarse en el árbol de la app, `UsersResolver` compilaría perfecto pero fallaría en tiempo de ejecución con un error de estrategia `'jwt'` no encontrada.
 - `JwtStrategy` depende de `AuthService` (para el método `validateUser`) — ambos viven en `AuthModule`, sin fricción.
 - `CurrentUser` (el decorador) depende únicamente de `GqlExecutionContext` y de la forma de `User` — no depende de ningún servicio, es una función pura sobre el `ExecutionContext`.
@@ -166,7 +166,7 @@ En este proyecto, `GraphQLModule.forRoot()` (en `app.module.ts`) **no define una
 
 ### `PassportStrategy`
 
-Passport.js es una librería de autenticación de Node, agnóstica de framework, basada en el concepto de "estrategias" (una por mecanismo: JWT, local/usuario-password, Google OAuth, etc.). `PassportStrategy` es una función *mixin* que provee `@nestjs/passport` para envolver una estrategia nativa de Passport (en este caso `Strategy` de `passport-jwt`) en una clase inyectable de Nest.
+Passport.js es una librería de autenticación de Node, agnóstica de framework, basada en el concepto de "estrategias" (una por mecanismo: JWT, local/usuario-password, Google OAuth, etc.). `PassportStrategy` es una función _mixin_ que provee `@nestjs/passport` para envolver una estrategia nativa de Passport (en este caso `Strategy` de `passport-jwt`) en una clase inyectable de Nest.
 
 ```ts
 export class JwtStrategy extends PassportStrategy(Strategy) { ... }
@@ -180,7 +180,7 @@ Es la implementación concreta de `PassportStrategy(Strategy)` para JWT. En el `
 
 ### `import { Repository } from 'typeorm'`
 
-`Repository<T>` es la clase de TypeORM que da acceso a las operaciones CRUD de una entidad (`find`, `findOneBy`, `save`, `create`, `createQueryBuilder`, etc.), ya *tipada* contra esa entidad. No se instancia a mano — se obtiene por inyección de dependencias:
+`Repository<T>` es la clase de TypeORM que da acceso a las operaciones CRUD de una entidad (`find`, `findOneBy`, `save`, `create`, `createQueryBuilder`, etc.), ya _tipada_ contra esa entidad. No se instancia a mano — se obtiene por inyección de dependencias:
 
 ```ts
 constructor(
@@ -211,7 +211,7 @@ Orden pensado por dependencias reales (cada paso solo necesita lo que ya existe 
 12. **Volver a `UsersResolver`** y agregar `@UseGuards(JwtAuthGuard)` + `@CurrentUser()` en las queries que lo necesiten — recién acá tiene sentido, porque antes esas dos piezas no existían.
 13. **`AppModule`** — importar `AuthModule` y `UsersModule` a nivel raíz. Este paso es el que efectivamente "activa" la estrategia `'jwt'` en toda la app (ver la nota de dependencia implícita en la sección 2).
 
-Si alguien siguiera este orden sin ayuda de IA, en cualquier paso donde el compilador se queje de un import que no existe, es señal de que ese paso depende de algo de un paso posterior en esta lista — normalmente indica que conviene adelantar ese archivo, o (como pasa con `AuthModule`↔`UsersModule`) que la pieza que falta es una *exportación* de módulo, no una clase nueva.
+Si alguien siguiera este orden sin ayuda de IA, en cualquier paso donde el compilador se queje de un import que no existe, es señal de que ese paso depende de algo de un paso posterior en esta lista — normalmente indica que conviene adelantar ese archivo, o (como pasa con `AuthModule`↔`UsersModule`) que la pieza que falta es una _exportación_ de módulo, no una clase nueva.
 
 ---
 

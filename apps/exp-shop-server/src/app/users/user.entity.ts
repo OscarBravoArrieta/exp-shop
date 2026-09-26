@@ -14,27 +14,27 @@ import { ValidRoles } from '../auth/enums/valid-roles.enum';
  */
 @ObjectType('User')
 export class User {
-  @Field(() => ID)
-  id!: string;
+    @Field(() => ID)
+    id!: string;
 
-  @Field(() => String)
-  fullName!: string;
+    @Field(() => String)
+    fullName!: string;
 
-  @Field(() => String)
-  email!: string;
+    @Field(() => String)
+    email!: string;
 
-  @Field(() => String, { nullable: true })
-  avatar!: string | null;
+    @Field(() => String, { nullable: true })
+    avatar!: string | null;
 
-  @Field(() => [ValidRoles])
-  roles!: string[];
+    @Field(() => [ValidRoles])
+    roles!: string[];
 
-  @Field(() => Boolean)
-  isActive!: boolean;
+    @Field(() => Boolean)
+    isActive!: boolean;
 
-  @Field(() => Date)
-  createdAt!: Date;
+    @Field(() => Date)
+    createdAt!: Date;
 
-  @Field(() => Date)
-  updatedAt!: Date;
+    @Field(() => Date)
+    updatedAt!: Date;
 }

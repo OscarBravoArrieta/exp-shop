@@ -26,13 +26,14 @@ Registrado en `AppModule` (`imports: [..., UsersModule]`).
 ### 2.1 `User` (GraphQL) es una clase nueva, no la del schema de Prisma ni la de `libs/shared/interfaces`
 
 Hay ahora **tres** representaciones de "usuario" en el proyecto, y es intencional:
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ 
-|                      Dónde                                         |    Qué es                            | Para qué                                                            |
-|--------------------------------------------------------------------|--------------------------------------|-------------------------------------------------------------------- |
-| `libs/backend/prisma/schema.prisma` → `model User`                 | Fuente de verdad de la base de datos | Persistencia (Prisma genera su propio tipo `User` a partir de esto) |
-| `apps/exp-shop-server/src/app/users/user.entity.ts` → `class User` | `@ObjectType()` de GraphQL           | Define lo que el **schema GraphQL** expone al mundo                 |
-| `libs/shared/interfaces` → `interface User`                        | Interfaz TS plana                    | La consume Angular por **REST**                                     |
-|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+| Dónde                                                                                                                                                                             | Qué es                               | Para qué                                                            |
+| --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------ | ------------------------------------------------------------------- |
+| `libs/backend/prisma/schema.prisma` → `model User`                                                                                                                                | Fuente de verdad de la base de datos | Persistencia (Prisma genera su propio tipo `User` a partir de esto) |
+| `apps/exp-shop-server/src/app/users/user.entity.ts` → `class User`                                                                                                                | `@ObjectType()` de GraphQL           | Define lo que el **schema GraphQL** expone al mundo                 |
+| `libs/shared/interfaces` → `interface User`                                                                                                                                       | Interfaz TS plana                    | La consume Angular por **REST**                                     |
+| --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 
 Mezclar cualquiera de estas sería un error: decorar el modelo de Prisma con `@ObjectType()` acoplaría tu capa de datos a GraphQL; reusar la interfaz de `libs/shared/interfaces` (que importa Angular) con decoradores de `@nestjs/graphql` arrastraría dependencias de servidor al bundle del navegador. Ya habíamos tomado esta misma decisión para `Product`/`CreateProductDto` — este módulo sigue el mismo criterio.
 
@@ -64,11 +65,11 @@ El proyecto de referencia usa `bcrypt` (con bindings nativos, compilados vía `n
 
 `UsersService.handleDbErrors` traduce los códigos de error de Prisma a excepciones HTTP/GraphQL legibles:
 
-| Código Prisma | Significado | Excepción lanzada |
-|---|---|---|
-| `P2002` | Violación de constraint único (ej. email duplicado) | `BadRequestException` con el nombre del campo |
-| `P2025` | El registro a actualizar/borrar no existe | `NotFoundException` |
-| cualquier otro | Error no anticipado | se loguea completo y se devuelve `InternalServerErrorException` genérico (no se filtran detalles internos al cliente) |
+| Código Prisma  | Significado                                         | Excepción lanzada                                                                                                     |
+| -------------- | --------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| `P2002`        | Violación de constraint único (ej. email duplicado) | `BadRequestException` con el nombre del campo                                                                         |
+| `P2025`        | El registro a actualizar/borrar no existe           | `NotFoundException`                                                                                                   |
+| cualquier otro | Error no anticipado                                 | se loguea completo y se devuelve `InternalServerErrorException` genérico (no se filtran detalles internos al cliente) |
 
 Es el mismo criterio que `handleDBErrors` en `nest-anylist` (que traducía el código `23505` de Postgres) — acá se traduce el código equivalente de Prisma en vez del código nativo de Postgres, porque Prisma ya lo normaliza por nosotros.
 
@@ -78,14 +79,14 @@ Es el mismo criterio que `handleDBErrors` en `nest-anylist` (que traducía el c�
 
 ```graphql
 type Mutation {
-  createUser(createUserInput: CreateUserInput!): User!
-  updateUser(updateUserInput: UpdateUserInput!): User!
-  removeUser(id: ID!): User!
+    createUser(createUserInput: CreateUserInput!): User!
+    updateUser(updateUserInput: UpdateUserInput!): User!
+    removeUser(id: ID!): User!
 }
 
 type Query {
-  users(roles: [String!]): [User!]!
-  user(id: ID!): User!
+    users(roles: [String!]): [User!]!
+    user(id: ID!): User!
 }
 ```
 

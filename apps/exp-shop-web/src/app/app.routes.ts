@@ -59,7 +59,7 @@ export const appRoutes: Route[] = [
                 path: '**',
                 title: 'Página no encontrada',
                 component: NotFound,
-            }
-        ]
+            },
+        ],
     },
 ];

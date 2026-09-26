@@ -9,24 +9,24 @@ import { Product } from '../products/product.entity';
  */
 @ObjectType('Category')
 export class Category {
-  @Field(() => ID)
-  id!: string;
+    @Field(() => ID)
+    id!: string;
 
-  @Field(() => String)
-  name!: string;
+    @Field(() => String)
+    name!: string;
 
-  @Field(() => String)
-  image!: string;
+    @Field(() => String)
+    image!: string;
 
-  @Field(() => String)
-  slug!: string;
+    @Field(() => String)
+    slug!: string;
 
-  @Field(() => [Product])
-  products?: Product[];
+    @Field(() => [Product])
+    products?: Product[];
 
-  @Field(() => Date)
-  createdAt!: Date;
+    @Field(() => Date)
+    createdAt!: Date;
 
-  @Field(() => Date)
-  updatedAt!: Date;
+    @Field(() => Date)
+    updatedAt!: Date;
 }

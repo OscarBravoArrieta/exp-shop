@@ -12,27 +12,27 @@ import { AUTH_TOKEN_KEY } from '../services/auth';
  * inyecta acá, con un Apollo Link propio, no con un interceptor.
  */
 export function createApolloClientOptions(): ApolloClient.Options {
-  const localStorage = inject(LocalStorage);
+    const localStorage = inject(LocalStorage);
 
-  const httpLink = new HttpLink({ uri: environment.graphqlUri });
+    const httpLink = new HttpLink({ uri: environment.graphqlUri });
 
-  const authLink = setContext((_operation, previousContext) => {
-    const token = localStorage.getItem<string>(AUTH_TOKEN_KEY);
+    const authLink = setContext((_operation, previousContext) => {
+        const token = localStorage.getItem<string>(AUTH_TOKEN_KEY);
+
+        return {
+            headers: {
+                ...previousContext['headers'],
+                ...(token ? { Authorization: `Bearer ${token}` } : {}),
+            },
+        };
+    });
 
     return {
-      headers: {
-        ...previousContext['headers'],
-        ...(token ? { Authorization: `Bearer ${token}` } : {}),
-      },
+        link: ApolloLink.from([authLink, httpLink]),
+        cache: new InMemoryCache(),
     };
-  });
-
-  return {
-    link: ApolloLink.from([authLink, httpLink]),
-    cache: new InMemoryCache(),
-  };
 }
 
 export function provideGraphQL() {
-  return provideApollo(createApolloClientOptions);
+    return provideApollo(createApolloClientOptions);
 }

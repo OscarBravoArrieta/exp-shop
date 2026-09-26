@@ -1,6 +1,13 @@
-<div>
-    <p>categories-list works!</p>
-    lorem ipsum
+<div class="content" style="width: 100%; height: 100%">
+    <h1>Administración de Categorías</h1>
+    <!-- ag-grid-angular usa `window` sin protección para SSR: se difiere para que
+         solo se construya en el navegador, nunca durante el render del servidor. -->
+    @defer (on immediate) {
+        <app-data-viewer-template>
+            
+        </app-data-viewer-template>
 
+    } @placeholder {
+        <div>Cargando tabla...</div>
+    }
 </div>
-

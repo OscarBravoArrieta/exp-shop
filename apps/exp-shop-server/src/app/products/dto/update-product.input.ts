@@ -4,7 +4,7 @@ import { CreateProductInput } from './create-product.input';
 
 @InputType()
 export class UpdateProductInput extends PartialType(CreateProductInput) {
-  @Field(() => ID)
-  @IsUUID()
-  id!: string;
+    @Field(() => ID)
+    @IsUUID()
+    id!: string;
 }

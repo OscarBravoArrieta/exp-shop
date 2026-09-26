@@ -11,12 +11,11 @@ import { Router } from '@angular/router';
     styleUrl: './header.scss',
 })
 export class Header implements OnInit {
-     readonly router = inject(Router);
-     items: MenuItem[] | undefined;
-     
-     ngOnInit() {
+    readonly router = inject(Router);
+    items: MenuItem[] | undefined;
 
-         //console.log(this.userProfile());
+    ngOnInit() {
+        //console.log(this.userProfile());
         this.items = [
             {
                 label: 'My Account',
@@ -40,7 +39,7 @@ export class Header implements OnInit {
     }
 
     callLogin() {
-       // this.router.navigate(['/login']);
-       console.log('callLogin');
+        // this.router.navigate(['/login']);
+        console.log('callLogin');
     }
 }

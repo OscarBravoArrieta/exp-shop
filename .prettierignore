@@ -5,3 +5,26 @@
 /.nx/workspace-data
 .nx/self-healing
 .angular
+
+# Cliente de Prisma generado (se regenera con `prisma generate`) — no tiene
+# sentido reformatearlo cada vez, igual que ya se ignora en .gitignore
+**/generated/prisma
+
+# Configuración/skills de asistentes de IA — no es código del proyecto
+/.agents
+/.codex
+/.cursor
+/.gemini
+/.opencode
+/.windsurf
+/.github
+AGENTS.md
+CLAUDE.md
+opencode.json
+
+# Lockfiles y package.json — su formato lo regenera npm (2 espacios) en cada
+# instalación; forzar el estilo de Prettier acá solo produciría diffs
+# perpetuos de ida y vuelta
+package-lock.json
+skills-lock.json
+package.json

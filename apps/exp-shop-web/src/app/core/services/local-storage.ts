@@ -10,47 +10,47 @@ import { isPlatformBrowser } from '@angular/common';
  */
 @Injectable({ providedIn: 'root' })
 export class LocalStorage {
-  private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
+    private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
 
-  setItem(key: string, value: unknown): void {
-    if (!this.isBrowser) return;
+    setItem(key: string, value: unknown): void {
+        if (!this.isBrowser) return;
 
-    try {
-      localStorage.setItem(key, JSON.stringify(value));
-    } catch (error) {
-      console.error(`Error guardando en localStorage la clave "${key}"`, error);
+        try {
+            localStorage.setItem(key, JSON.stringify(value));
+        } catch (error) {
+            console.error(`Error guardando en localStorage la clave "${key}"`, error);
+        }
     }
-  }
 
-  getItem<T>(key: string): T | null {
-    if (!this.isBrowser) return null;
+    getItem<T>(key: string): T | null {
+        if (!this.isBrowser) return null;
 
-    try {
-      const raw = localStorage.getItem(key);
-      return raw === null ? null : (JSON.parse(raw) as T);
-    } catch (error) {
-      console.error(`Error leyendo de localStorage la clave "${key}"`, error);
-      return null;
+        try {
+            const raw = localStorage.getItem(key);
+            return raw === null ? null : (JSON.parse(raw) as T);
+        } catch (error) {
+            console.error(`Error leyendo de localStorage la clave "${key}"`, error);
+            return null;
+        }
     }
-  }
 
-  removeItem(key: string): void {
-    if (!this.isBrowser) return;
+    removeItem(key: string): void {
+        if (!this.isBrowser) return;
 
-    try {
-      localStorage.removeItem(key);
-    } catch (error) {
-      console.error(`Error eliminando de localStorage la clave "${key}"`, error);
+        try {
+            localStorage.removeItem(key);
+        } catch (error) {
+            console.error(`Error eliminando de localStorage la clave "${key}"`, error);
+        }
     }
-  }
 
-  clearAllStorage(): void {
-    if (!this.isBrowser) return;
+    clearAllStorage(): void {
+        if (!this.isBrowser) return;
 
-    try {
-      localStorage.clear();
-    } catch (error) {
-      console.error('Error limpiando localStorage', error);
+        try {
+            localStorage.clear();
+        } catch (error) {
+            console.error('Error limpiando localStorage', error);
+        }
     }
-  }
 }

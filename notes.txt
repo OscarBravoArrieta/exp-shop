@@ -191,9 +191,7 @@ nx add @nx/storybook
 
 
 
------------------------------
- npx nx run exp-shop-web:serve --configuration=development
- nx run exp-shop-web:serve:development
+
  
  
 
@@ -202,21 +200,25 @@ nx add @nx/storybook
 
 
 
+protected readonly userService = inject(Users);
+
+  protected readonly usersResource = rxResource({
+    stream: () => this.userService.getUsers().pipe(
+      tap((data) => console.log('Respuesta HTTP recibida:', data))
+    ),
+    defaultValue: [] as User[]
+  });
+
+
+-----------------------------------------------------------
+Server
+npx nx run exp-shop-server:serve --configuration=development 
+----------------------------------------------------------
+frontEnd
+npx nx run exp-shop-web:serve --configuration=development 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-IA de google: 
-https://share.google/aimode/81a0vCpWFuRgh3SuK
-
-https://www.google.com/search?q=en+nx+23.2.0+como+agregar+aplicaciones+al+repositorio&csuir=1&aep=34&kgs=5e6c902d4e4fd7d8&shem=agpl%2Caiolsbe%2Casdpe%2Cepsd1%2Crimspwouoe&shndl=37&shmd=H4sIAAAAAAAA_3XNQYoCMRCF4end4EZw6SrMUjDRFmcxeJdQJkV1QXclVCLdS481Z_A8HsAWdDXM9sH3v8W9WRxRjEymPdjW7kxIQzJAigRqIPccIHASLAZ6o5hT4ZqU0_rU1ZrLj3PjOFoqFSoHO2tXEDR026xzyQEPvnSg6Gt3Gc4C3Nss9LV6a0qJerTAbvMxXZfX5vfz1vj_2jwAYXFnBYks9NLkSSEySnX76c_mZy8RNPr99y7m5_0DJC5uevcAAAA&shmds=v1_ARwrE22BdiNUMlzMgd0U2W89MSrC6ZgZAbacE9Npyqdk8Mge8g&source=sh%2Fx%2Faim%2Fm1%2F1&atvm=2&mtid=tmmgas7bG_aZwbkP5c6zoQE&mstk=AUtExfBEmNjduY1_YYyFYRVo6CjmNVEiAiqlCgvyiJ3AIBhUlLpg7pBxE7EbA64_7K_ewGz4HMv_1MHp44ONF6UtEEQUhCM24Os5XSsHxgVXxlJlDOjWR8kfefOJs9skmL1FhV2gGWYBSUZDCYKGC9uGXNcMEiZ1M3rYB9dsz03PGhn8UiBXfaY1PxF4miH5Ad2yqYs13Wd0-NZXbK4EwSm7v5Zf_Ky1V7RtgKAFxnCD21fwNEBsUz4n5SiqNHo_urypS5JpAyOue8UlVSNQ-7v2GmEiheaRkCnKRlyO1CY1GhDb1WJ41ZInksT_MDQTSVA0KGx6N-9y4_wgAA&lns_mode=cvst&udm=50
+DATABASE_URL="postgresql://neondb_owner:npg_TAdHQXOb2N4n@ep-purple-mouse-b42r82kp-pooler.c-6.us-east-2.aws.neon.tech/neondb?sslmode=require&channel_binding=require"
+JWT_SECRET=d187d1947a594a0034ef4a634600f3180e6943c6b3127026f85088be15d39813924758cce6ceeb81226b592dde5dc3a7e443f9d898ff3af1098c8e8f0552ffb2
+JWT_EXPIRATION=3600

@@ -19,8 +19,13 @@
 
 ```ts
 const authLink = setContext((_operation, previousContext) => {
-  const token = localStorage.getItem<string>(AUTH_TOKEN_KEY);
-  return { headers: { ...previousContext['headers'], ...(token ? { Authorization: `Bearer ${token}` } : {}) } };
+    const token = localStorage.getItem<string>(AUTH_TOKEN_KEY);
+    return {
+        headers: {
+            ...previousContext['headers'],
+            ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+    };
 });
 
 link: ApolloLink.from([authLink, httpLink]);
@@ -77,11 +82,11 @@ Usé la API estable de Angular 22 (`@angular/forms/signals`), verificada contra 
 ```ts
 loginModel = signal<LoginFormModel>({ email: '', password: '' });
 
-loginForm = form(this.loginModel, (schemaPath) => {
-  required(schemaPath.email, { message: '...' });
-  email(schemaPath.email, { message: '...' });
-  required(schemaPath.password, { message: '...' });
-  minLength(schemaPath.password, 8, { message: '...' });
+loginForm = form(this.loginModel, schemaPath => {
+    required(schemaPath.email, { message: '...' });
+    email(schemaPath.email, { message: '...' });
+    required(schemaPath.password, { message: '...' });
+    minLength(schemaPath.password, 8, { message: '...' });
 });
 ```
 
@@ -94,6 +99,7 @@ La imagen llegó en un mensaje posterior — layout de dos columnas: panel de ma
 **Texto de marca adaptado**: el mockup decía "ATLAS" / "Tu infraestructura, siempre disponible." (es una plantilla genérica de infraestructura/DevOps, no de e-commerce). Lo cambié a "EXP SHOP" / "Tu tienda, siempre disponible." para que tenga sentido con tu proyecto. Si en realidad querías el texto literal del mockup, dime y lo dejo igual.
 
 **Elementos visuales sin funcionalidad real detrás** (se ven en el diseño, pero no están conectados a nada todavía — no estaba pedido, y cada uno implica trabajo aparte):
+
 - **"Continuar con Google"** — el backend no tiene ninguna estrategia de OAuth de Google configurada (sería una `PassportStrategy` nueva, credenciales de Google Cloud, etc.). El botón está deshabilitado.
 - **"Olvidé mi contraseña"** — no hay flujo de recuperación de contraseña (ni mutation en el backend). Es texto, no un link real.
 - **"¿Aún no tienes cuenta? Créala ahora"** — no hay pantalla de registro (`SignupInput`/`signup` sí existen en el backend desde el módulo `auth`, pero no hay componente ni ruta de signup en el frontend todavía).
@@ -168,11 +174,12 @@ Esto nunca podía funcionar con `RenderMode.Server` para rutas protegidas, sin i
 
 `app.routes.server.ts`: la ruta comodín (`**`, todo lo que no sea `auth-login`) pasó de `RenderMode.Server` a `RenderMode.Client`. Con esto el servidor devuelve un shell sin evaluar rutas/guards, y `checkAuthStatus()`/`authGuard` corren únicamente en el navegador — donde el `localStorage` real sí existe, en el arranque inicial y en cada F5 por igual. `auth-login` se queda en `RenderMode.Prerender` (no depende de sesión, sigue sirviendo su HTML público).
 
-Nota: esto significa que las rutas protegidas dejan de tener contenido en el HTML inicial de SSR (antes tampoco lo tenían de forma *correcta*, porque el guard siempre fallaba ahí — ver arriba). Si en el futuro quieres SSR real para contenido autenticado, la única forma de que funcione es dejar de depender de `localStorage` y mover el token a una cookie que el navegador mande en cada request (para que el servidor sí pueda leerla) — cambio de arquitectura más grande, no lo hice porque no era lo pedido.
+Nota: esto significa que las rutas protegidas dejan de tener contenido en el HTML inicial de SSR (antes tampoco lo tenían de forma _correcta_, porque el guard siempre fallaba ahí — ver arriba). Si en el futuro quieres SSR real para contenido autenticado, la única forma de que funcione es dejar de depender de `localStorage` y mover el token a una cookie que el navegador mande en cada request (para que el servidor sí pueda leerla) — cambio de arquitectura más grande, no lo hice porque no era lo pedido.
 
 ### Verificado
 
 Con un frontend aislado (puerto 4201) **y un backend aislado** (puerto 3099, mismo `DATABASE_URL`, `CORS_ORIGIN=http://localhost:4201`) — ninguno de los dos toca tus sesiones reales en 4200/3000 — creé un usuario de prueba real vía la mutation pública `signup`, inyecté su token real en `localStorage` con Playwright, y confirmé:
+
 - Navegar a `/` con token válido → redirige a `/auth-profile`, contenido real, título correcto.
 - **F5 (reload) sobre esa misma página → se queda en `/auth-profile`**, ya no salta a login. Este era el bug reportado.
 - Sin token → `/` sigue mandando a `/auth-login`, con y sin F5 (el caso negativo sigue funcionando).

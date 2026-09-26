@@ -1,6 +1,6 @@
- export interface DataSchema {
-     field: string
-     header: string
-     sortableColumnDisabled: boolean
-     contentType: string
- }
+export interface DataSchema {
+    field: string;
+    headerName: string;
+    sortableColumnDisabled: boolean;
+    contentType: string;
+}

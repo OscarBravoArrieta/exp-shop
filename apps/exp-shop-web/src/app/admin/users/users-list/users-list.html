@@ -1,5 +1,18 @@
-<div>
-    <p>users-list works!</p>
-    lorem ipsum
+<div class="content" style="width: 100%; height: 100%">
+    <h1>Administración de usuarios</h1>
+   
+    @if (usersResource.isLoading()) {
+         <p>Cargando usuarios...</p>
+    } @else if (usersResource.error()) {
+        <p>Error al cargar usuarios: {{ usersResource.error() }}</p>
+    } @else {
+        <div class="content" style="width: 100%; height: 100%">
+		   
+            <app-data-viewer-template
+                [dataSet] = "usersResource.value()"
+                [columnDefs] = "colDefs()"
+            />
+		</div>
+        
+    }
 </div>
-

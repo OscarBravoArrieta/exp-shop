@@ -1,26 +1,19 @@
- export interface SelectStringInterface {
+export interface SelectStringInterface {
+    name: string;
+    value: string;
+}
 
-     name: string
-     value: string
+//------------------------------------------------------------------------------------------------
 
- }
+export interface SelectNumberInterface {
+    name: string;
+    value: number;
+}
 
- //------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------
 
-  export interface SelectNumberInterface {
+export interface Role {
+    name: string;
+}
 
-     name: string
-     value: number
-
- }
-
- //------------------------------------------------------------------------------------------------
-
- export interface Role {
-
-     name: string
-
- }
-
- //------------------------------------------------------------------------------------------------
-
+//------------------------------------------------------------------------------------------------

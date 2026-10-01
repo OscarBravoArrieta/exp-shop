@@ -5,6 +5,9 @@ import { rxResource } from '@angular/core/rxjs-interop';
 import { Users } from '../../../core/services/users'
 import { User } from '../../../core/models/users.model';
 import type { ColDef } from 'ag-grid-community'; // Column Definition Type Interface
+import { ActionButtonsCell } from '../../../shared/components/action-buttons-cell/action-buttons-cell';
+import { EntityConfig } from '../../../core/models/entity-config.model';
+import { UsersForm } from '../users-form/users-form';
 
 @Component({
     selector: 'app-users-list',
@@ -19,30 +22,34 @@ export default class UsersList  {
         stream: () => this.userService.getUsers(),
         defaultValue: [] as User[]   
     });
+  
+    config: EntityConfig<User> = {
+        title: 'USUARIOS',
+        form: UsersForm,
+        load: () => this.userService.getUsers(),
+        savedMsg: 'Usuario guardado'
+    }
 
     colDefs = signal<ColDef[]>([
 
         {
             field: 'fullName', 
-            headerName: 'Name',
+            headerName: 'Usuario',
             editable: true
            
         },
         {
             field: 'roles', 
-            headerName: 'Role'
+            headerName: 'Rol'
         },
         {
             field: 'email', 
-            headerName: 'Email'
+            headerName: 'Correo electrónico'
         },
-        {
-            field: 'avatar', 
-            headerName: 'Avatar'
-        },
+
         {
             field: 'createdAt', 
-            headerName: 'Creation Date',
+            headerName: 'Fecha de',
             cellDataType: 'date',
             valueFormatter: params => {
             if (!params.value) return '';            
@@ -54,6 +61,20 @@ export default class UsersList  {
             },
             
         },
-
+        {
+            headerName: 'Acciones',
+            field: 'acciones',
+            cellRenderer: ActionButtonsCell, // Asignamos el componente de PrimeNG
+            sortable: false,
+            filter: false,
+            width: 150
+        }
+    
     ])
+
+    deleteRow(id: number) {
+
+        console.log(`Fila con ID ${id} removida exitosamente.`);
+        
+    }    
 }

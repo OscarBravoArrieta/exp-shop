@@ -1,13 +1,23 @@
-<div class="content" style="width: 100%; height: 100%">
+<div class="content" style="width: 100%; height: 95%">
+    <p-confirmdialog />
+    
     <div class="flex justify-content-between flex-wrap">
-        <div class="flex align-items-center justify-content-center w-4rem h-4rem bg-primary font-bold border-round m-2">1</div>
-        <div class="flex align-items-center justify-content-center w-4rem h-4rem bg-primary font-bold border-round m-2">2</div>
-        <div class="flex align-items-center justify-content-center w-4rem h-4rem">
+        <div class="flex align-items-center justify-content-center w-4rem h-4rem font-bold border-round">
+            {{config().title | titlecase }}
+        </div>
+        <div class="flex align-items-center justify-content-center">
             <div class="flex align-items-center justify-content-center">
-                <button pButton>Nuevo</button>
+                <button 
+                    pButton
+                    (click)="callDialog('1','open')">
+                    <svg data-p-icon="plus"></svg>                    
+                    Nuevo
+                </button>
             </div>
-            <div class="flex align-items-center justify-content-center">
-                <button pButton (click)="exportarA_CSV()">Exportar</button>
+            <div class="flex align-items-center justify-content-center ml-2">
+                <button pButton (click)="csvExport()">
+                    <svg data-p-icon="file-export"></svg>Exportar
+                </button>
             </div>
         </div>
     </div>                
@@ -18,10 +28,9 @@
             [rowData]="dataSet()"
             [columnDefs]="columnDefs()"
             [defaultColDef]="defaultColDef" 
-            style="width: 100%; height: 100%;"    
-            [defaultColDef]="defaultColDef"
             [pagination]="true"
             (gridReady)="onGridReady($event)"
+            [gridOptions]="gridOptions"
             [paginationPageSize]="10"/>
     } @placeholder {
         <div>Cargando tabla...</div>

@@ -77,7 +77,7 @@ export class Auth {
                     if (!result.data) {
                         throw new Error('No se recibió respuesta del servidor al iniciar sesión');
                     }
-                    console.log('Login response from authService:', result.data.login);
+                    //console.log('Login response from authService:', result.data.login);
                     return result.data.login;
                 }),
                 tap(auth => this.setSession(auth))

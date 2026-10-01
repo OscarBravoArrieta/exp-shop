@@ -1,0 +1,14 @@
+:host {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+/* Contenedor flexible con espacio entre botones (gap) */
+.button-container {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 6px; /* Espacio de 6px entre cada botón */
+    height: 100%;
+    width: 100%;
+}

@@ -212,10 +212,10 @@ protected readonly userService = inject(Users);
 
 -----------------------------------------------------------
 Server
-npx nx run exp-shop-server:serve --configuration=development 
+npx nx run exp-shop-server:serve --configuration=development
 ----------------------------------------------------------
 frontEnd
-npx nx run exp-shop-web:serve --configuration=development 
+npx nx run exp-shop-web:serve --configuration=development
 
 
 

@@ -1,0 +1,14 @@
+<div class="button-container">
+    <button pButton (click)="onClick($event,'SHOW')" [pTooltip]="'Ver: ' + rowName" iconOnly rounded severity="contrast" variant="outlined" aria-label="Cancel">
+        <svg data-p-icon="eye"></svg>
+    </button>
+    <button pButton (click)="onClick($event,'EDIT')" [pTooltip]="'Editar: ' + rowName"  iconOnly rounded severity="success" variant="outlined" aria-label="Cancel">
+        <svg data-p-icon="pen-line"></svg>
+    </button>
+    <!-- <button pButton (click)="onClick($event, 'DELETE')" [pTooltip]="'Eliminar: ' + rowName"  iconOnly rounded severity="danger" variant="outlined" aria-label="Cancel">
+        <svg data-p-icon="minus-circle"></svg>
+    </button> -->
+    <button pButton (click)="onClick($event, 'DELETE')" [pTooltip]="'Eliminar: ' + rowName"  iconOnly rounded severity="danger" variant="outlined" aria-label="Cancel">
+        <svg data-p-icon="minus-circle"></svg>
+    </button>    
+ </div>

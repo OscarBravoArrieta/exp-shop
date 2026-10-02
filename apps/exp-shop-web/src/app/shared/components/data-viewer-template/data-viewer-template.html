@@ -1,16 +1,15 @@
 <div class="content" style="width: 100%; height: 95%">
     <p-confirmdialog />
-    
+
     <div class="flex justify-content-between flex-wrap">
-        <div class="flex align-items-center justify-content-center w-4rem h-4rem font-bold border-round">
-            {{config().title | titlecase }}
+        <div
+            class="flex align-items-center justify-content-center w-4rem h-4rem font-bold border-round">
+            {{ config().title | titlecase }}
         </div>
         <div class="flex align-items-center justify-content-center">
             <div class="flex align-items-center justify-content-center">
-                <button 
-                    pButton
-                    (click)="callDialog('1','open')">
-                    <svg data-p-icon="plus"></svg>                    
+                <button pButton (click)="callDialog('', 'create')">
+                    <svg data-p-icon="plus"></svg>
                     Nuevo
                 </button>
             </div>
@@ -20,18 +19,19 @@
                 </button>
             </div>
         </div>
-    </div>                
-                   
+    </div>
+
     @defer (on immediate) {
         <ag-grid-angular
             style="width: 100%; height: 100%"
             [rowData]="dataSet()"
             [columnDefs]="columnDefs()"
-            [defaultColDef]="defaultColDef" 
+            [defaultColDef]="defaultColDef"
             [pagination]="true"
             (gridReady)="onGridReady($event)"
             [gridOptions]="gridOptions"
-            [paginationPageSize]="10"/>
+            [paginationPageSize]="50"             
+        />
     } @placeholder {
         <div>Cargando tabla...</div>
     }

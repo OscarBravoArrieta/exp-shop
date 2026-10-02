@@ -33,6 +33,7 @@ import { DynamicDialogModule } from 'primeng/dynamicdialog';
 import { TooltipModule } from 'primeng/tooltip';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { Dialog } from 'primeng/dialog';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 @NgModule({
     imports: [
@@ -67,7 +68,8 @@ import { Dialog } from 'primeng/dialog';
         DynamicDialogModule,
         TooltipModule,
         ConfirmDialogModule,
-        Dialog
+        Dialog,
+        ProgressSpinnerModule
     ],
     exports: [
         InputTextModule,
@@ -100,7 +102,8 @@ import { Dialog } from 'primeng/dialog';
         DynamicDialogModule,
         TooltipModule,
         ConfirmDialogModule,
-        Dialog
+        Dialog,
+        ProgressSpinnerModule
     ],
 })
 export class PrimeNgModule {}

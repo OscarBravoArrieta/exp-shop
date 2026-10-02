@@ -56,6 +56,15 @@ export class CategoriesResolver {
         return this.categoriesService.remove(id);
     }
 
+    @Mutation(() => Category, { name: 'softDeleteCategory' })
+    @UseGuards(JwtAuthGuard)
+    softDeleteCategory(
+        @Args('id', { type: () => ID }) id: string,
+        @CurrentUser([ValidRoles.admin]) _admin: User
+    ): Promise<Category> {
+        return this.categoriesService.softDelete(id);
+    }
+
     @ResolveField(() => [Product])
     products(@Parent() category: Category): Promise<Product[]> {
         return this.categoriesService.findProductsByCategory(category.id);

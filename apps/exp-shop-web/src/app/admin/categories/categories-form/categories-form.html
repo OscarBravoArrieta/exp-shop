@@ -1,1 +1,105 @@
-<p>categories-form works!</p>
+<!--
+  Mismo lenguaje visual que users-form.html (título + subtítulo, inputs
+  redondeados con borde, botón principal en píldora azul) adaptado a un
+  diálogo.
+-->
+<form class="categories-form" novalidate (submit)="onSubmit($event)">
+    <h2 class="categories-form__title">{{ title() }}</h2>
+    <p class="categories-form__subtitle">{{ subtitle() }}</p>
+
+    @if (loading()) {
+        <p class="categories-form__loading">Cargando datos de la categoría...</p>
+    }
+
+    @if (errorMessage(); as message) {
+        <p-message severity="error" styleClass="categories-form__error">{{ message }}</p-message>
+    }
+
+    @if (mode() === 'view' && lastStatus() !== null) {
+        <p class="categories-form__status">
+            Estado:
+            <span [class.categories-form__status--inactive]="!lastStatus()">
+                {{ lastStatus() ? 'Activo' : 'Inactivo' }}
+            </span>
+        </p>
+    }
+
+    <div class="categories-form__field">
+        <label class="categories-form__label" for="categories-form-name">Nombre</label>
+        <input
+            id="categories-form-name"
+            pInputText
+            type="text"
+            placeholder="Nombre de la categoría"
+            [formField]="categoryForm.name" />
+        @if (categoryForm.name().touched() && categoryForm.name().invalid()) {
+            @for (error of categoryForm.name().errors(); track error.message) {
+                <small class="categories-form__field-error">{{ error.message }}</small>
+            }
+        }
+    </div>
+
+    <div class="categories-form__field">
+        <label class="categories-form__label" for="categories-form-image">Imagen (URL)</label>
+        <input
+            id="categories-form-image"
+            pInputText
+            type="text"
+            placeholder="https://..."
+            [formField]="categoryForm.image" />
+        @if (categoryForm.image().touched() && categoryForm.image().invalid()) {
+            @for (error of categoryForm.image().errors(); track error.message) {
+                <small class="categories-form__field-error">{{ error.message }}</small>
+            }
+        }
+    </div>
+
+    <div class="categories-form__field">
+        <label class="categories-form__label" for="categories-form-slug">Slug</label>
+        <input
+            id="categories-form-slug"
+            pInputText
+            type="text"
+            placeholder="nombre-de-la-categoria"
+            [formField]="categoryForm.slug" />
+        @if (categoryForm.slug().touched() && categoryForm.slug().invalid()) {
+            @for (error of categoryForm.slug().errors(); track error.message) {
+                <small class="categories-form__field-error">{{ error.message }}</small>
+            }
+        }
+    </div>
+
+    <div class="categories-form__actions">
+        @if (mode() === 'edit') {
+            <button
+                pButton
+                type="button"
+                severity="danger"
+                [disabled]="submitting()"
+                class="categories-form__delete"
+                (click)="onSoftDelete()">
+                Eliminar
+            </button>
+        }
+
+        <button
+            pButton
+            type="button"
+            severity="secondary"
+            variant="outlined"
+            class="categories-form__cancel"
+            (click)="onCancel()">
+            {{ readOnly() ? 'Cerrar' : 'Cancelar' }}
+        </button>
+
+        @if (!readOnly()) {
+            <button pButton type="submit" [disabled]="submitting()" class="categories-form__submit">
+                @if (submitting()) {
+                    Guardando...
+                } @else {
+                    Guardar
+                }
+            </button>
+        }
+    </div>
+</form>

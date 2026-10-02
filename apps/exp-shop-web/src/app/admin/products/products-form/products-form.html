@@ -1,1 +1,155 @@
-<p>products-form works!</p>
+<!--
+  Mismo lenguaje visual que users-form.html (título + subtítulo, inputs
+  redondeados con borde, botón principal en píldora azul) adaptado a un
+  diálogo.
+-->
+<form class="products-form" novalidate (submit)="onSubmit($event)">
+    <h2 class="products-form__title">{{ title() }}</h2>
+    <p class="products-form__subtitle">{{ subtitle() }}</p>
+
+    @if (loading()) {
+        <p class="products-form__loading">Cargando datos del producto...</p>
+    }
+
+    @if (errorMessage(); as message) {
+        <p-message severity="error" styleClass="products-form__error">{{ message }}</p-message>
+    }
+
+    @if (mode() === 'view' && lastStatus() !== null) {
+        <p class="products-form__status">
+            Estado:
+            <span [class.products-form__status--inactive]="!lastStatus()">
+                {{ lastStatus() ? 'Activo' : 'Inactivo' }}
+            </span>
+        </p>
+    }
+
+    <div class="products-form__field">
+        <label class="products-form__label" for="products-form-title">Título</label>
+        <input
+            id="products-form-title"
+            pInputText
+            type="text"
+            placeholder="Nombre del producto"
+            [formField]="productForm.title" />
+        @if (productForm.title().touched() && productForm.title().invalid()) {
+            @for (error of productForm.title().errors(); track error.message) {
+                <small class="products-form__field-error">{{ error.message }}</small>
+            }
+        }
+    </div>
+
+    <div class="products-form__field">
+        <label class="products-form__label" for="products-form-price">Precio</label>
+        <input
+            id="products-form-price"
+            pInputText
+            type="number"
+            step="0.01"
+            placeholder="0.00"
+            [formField]="productForm.price" />
+        @if (productForm.price().touched() && productForm.price().invalid()) {
+            @for (error of productForm.price().errors(); track error.message) {
+                <small class="products-form__field-error">{{ error.message }}</small>
+            }
+        }
+    </div>
+
+    <div class="products-form__field">
+        <label class="products-form__label" for="products-form-description">Descripción</label>
+        <textarea
+            id="products-form-description"
+            rows="3"
+            placeholder="Describe el producto"
+            [formField]="productForm.description"></textarea>
+        @if (productForm.description().touched() && productForm.description().invalid()) {
+            @for (error of productForm.description().errors(); track error.message) {
+                <small class="products-form__field-error">{{ error.message }}</small>
+            }
+        }
+    </div>
+
+    <div class="products-form__field">
+        <label class="products-form__label" for="products-form-slug">Slug</label>
+        <input
+            id="products-form-slug"
+            pInputText
+            type="text"
+            placeholder="nombre-del-producto"
+            [formField]="productForm.slug" />
+        @if (productForm.slug().touched() && productForm.slug().invalid()) {
+            @for (error of productForm.slug().errors(); track error.message) {
+                <small class="products-form__field-error">{{ error.message }}</small>
+            }
+        }
+    </div>
+
+    <div class="products-form__field">
+        <label class="products-form__label" for="products-form-quantity">Cantidad</label>
+        <input
+            id="products-form-quantity"
+            pInputText
+            type="number"
+            placeholder="0"
+            [formField]="productForm.quantity" />
+        @if (productForm.quantity().touched() && productForm.quantity().invalid()) {
+            @for (error of productForm.quantity().errors(); track error.message) {
+                <small class="products-form__field-error">{{ error.message }}</small>
+            }
+        }
+    </div>
+
+    <div class="products-form__field">
+        <label class="products-form__label" for="products-form-category">Categoría</label>
+        <select id="products-form-category" [formField]="productForm.categoryId">
+            <option value="">Sin categoría</option>
+            @for (category of categoriesResource.value(); track category.id) {
+                <option [value]="category.id">{{ category.name }}</option>
+            }
+        </select>
+    </div>
+
+    <div class="products-form__field">
+        <label class="products-form__label" for="products-form-image">Imagen (URL)</label>
+        <input
+            id="products-form-image"
+            pInputText
+            type="text"
+            placeholder="https://..."
+            [formField]="productForm.image" />
+    </div>
+
+    <div class="products-form__actions">
+        @if (mode() === 'edit') {
+            <button
+                pButton
+                type="button"
+                severity="danger"
+                [disabled]="submitting()"
+                class="products-form__delete"
+                (click)="onSoftDelete()">
+                Eliminar
+            </button>
+        }
+
+        <button
+            pButton
+            type="button"
+            severity="secondary"
+            variant="outlined"
+            class="products-form__cancel"
+            (click)="onCancel()">
+            {{ readOnly() ? 'Cerrar' : 'Cancelar' }}
+        </button>
+
+        @if (!readOnly()) {
+            <button pButton type="submit" [disabled]="submitting()" class="products-form__submit">
+                @if (submitting()) {
+                    Guardando...
+                } @else {
+                    Guardar
+                }
+            </button>
+        }
+    </div>
+</form>

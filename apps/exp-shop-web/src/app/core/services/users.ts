@@ -55,6 +55,12 @@ const UPDATE_USER_MUTATION = gql`
   }
 `;
 
+const SOFT_DELETE_USER_MUTATION = gql`
+  mutation SoftDeleteUser($id: ID!) {
+    softDeleteUser(id: $id) { ${USER_FIELDS} }
+  }
+`;
+
 /**
  * Todas las queries/mutations de acá exigen rol admin (o admin/superUser en
  * `user`/`userByEmail`) del lado del backend — ver docs/modulo-auth-jwt.md §4.3.
@@ -137,6 +143,23 @@ export class Users {
                         throw new Error('No se pudo actualizar el usuario');
                     }
                     return result.data.updateUser;
+                })
+            );
+    }
+
+    /** Baja lógica: el backend marca isActive en false, no borra el registro. */
+    softDeleteUser(id: string): Observable<User> {
+        return this.apollo
+            .mutate<{ softDeleteUser: User }>({
+                mutation: SOFT_DELETE_USER_MUTATION,
+                variables: { id },
+            })
+            .pipe(
+                map(result => {
+                    if (!result.data) {
+                        throw new Error('No se pudo desactivar el usuario');
+                    }
+                    return result.data.softDeleteUser;
                 })
             );
     }

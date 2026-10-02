@@ -24,6 +24,9 @@ export class Product {
     @Field(() => Int)
     quantity!: number;
 
+    @Field(() => Boolean)
+    isActive!: boolean;
+
     @Field(() => ID, { nullable: true })
     categoryId!: string | null;
 

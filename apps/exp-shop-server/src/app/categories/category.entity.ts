@@ -21,6 +21,9 @@ export class Category {
     @Field(() => String)
     slug!: string;
 
+    @Field(() => Boolean)
+    isActive!: boolean;
+
     @Field(() => [Product])
     products?: Product[];
 

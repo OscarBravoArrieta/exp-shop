@@ -1,0 +1,134 @@
+// Mismos tokens de color que users-form.scss / auth/login/login.scss.
+$brand-blue: #0b49c7;
+$brand-blue-dark: #083a9e;
+$text-muted: #6b7280;
+$border-color: #d9dee6;
+$danger: #dc2626;
+$danger-dark: #b91c1c;
+
+.products-form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+
+    &__title {
+        margin: 0;
+        font-size: 1.75rem;
+        font-weight: 500;
+    }
+
+    &__subtitle {
+        margin: 0.35rem 0 1.25rem;
+        color: $text-muted;
+        font-size: 0.9rem;
+    }
+
+    &__loading {
+        margin: 0 0 1rem;
+        color: $text-muted;
+        font-size: 0.9rem;
+    }
+
+    &__error {
+        margin-bottom: 1rem;
+    }
+
+    &__status {
+        margin: 0 0 1rem;
+        font-size: 0.9rem;
+
+        &--inactive {
+            color: $danger;
+            font-weight: 600;
+        }
+    }
+
+    &__field {
+        margin-bottom: 1rem;
+
+        input[type='text'],
+        input[type='number'],
+        textarea,
+        select {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border-radius: 10px;
+            border: 1px solid $border-color;
+            font-size: 0.95rem;
+            font-family: inherit;
+        }
+
+        textarea {
+            resize: vertical;
+        }
+    }
+
+    &__label {
+        display: block;
+        margin-bottom: 0.4rem;
+        font-size: 0.85rem;
+        font-weight: 500;
+        color: #1f2937;
+    }
+
+    &__field-error {
+        display: block;
+        margin-top: 0.35rem;
+        color: #ef4444;
+        font-size: 0.8rem;
+    }
+
+    &__actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 0.75rem;
+        margin-top: 1.5rem;
+    }
+
+    &__submit {
+        padding: 0.75rem 1.5rem;
+        border-radius: 999px;
+        border: none;
+        background-color: $brand-blue;
+        color: #fff;
+        font-size: 0.95rem;
+        font-weight: 500;
+        cursor: pointer;
+
+        &:hover:not(:disabled) {
+            background-color: $brand-blue-dark;
+        }
+
+        &:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+    }
+
+    &__cancel {
+        padding: 0.75rem 1.5rem;
+        border-radius: 999px;
+        font-size: 0.95rem;
+    }
+
+    &__delete {
+        padding: 0.75rem 1.5rem;
+        border-radius: 999px;
+        border: none;
+        background-color: $danger;
+        color: #fff;
+        font-size: 0.95rem;
+        font-weight: 500;
+        cursor: pointer;
+        margin-right: auto;
+
+        &:hover:not(:disabled) {
+            background-color: $danger-dark;
+        }
+
+        &:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+    }
+}

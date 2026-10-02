@@ -27,7 +27,10 @@ export class UsersService {
 
     findAll(roles: string[] = []): Promise<PrismaUser[]> {
         return this.prisma.user.findMany({
-            where: roles.length > 0 ? { roles: { hasSome: roles } } : undefined,
+            where: {
+                isActive: true,
+                ...(roles.length > 0 ? { roles: { hasSome: roles } } : {}),
+            },
             orderBy: { createdAt: 'desc' },
         });
     }
@@ -71,6 +74,18 @@ export class UsersService {
     async remove(id: string): Promise<PrismaUser> {
         try {
             return await this.prisma.user.delete({ where: { id } });
+        } catch (error) {
+            handlePrismaError(error, this.logger, 'un usuario');
+        }
+    }
+
+    /** Baja lógica: marca isActive en false en vez de borrar el registro físicamente. */
+    async softDelete(id: string): Promise<PrismaUser> {
+        try {
+            return await this.prisma.user.update({
+                where: { id },
+                data: { isActive: false },
+            });
         } catch (error) {
             handlePrismaError(error, this.logger, 'un usuario');
         }

@@ -32,6 +32,7 @@ model Category {
   name      String
   image     String
   slug      String    @unique
+  isActive  Boolean   @default(true)
   products  Product[] // <--- Agrega esta línea para resolver el error
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
@@ -44,9 +45,10 @@ model Product {
   title       String
   price       Float
   description String
-  images      String[]  
+  images      String[]
   slug        String    @unique
   quantity    Int       @default(0) // Nota: corregido @default(0()) que tenía un error de sintaxis
+  isActive    Boolean   @default(true)
   categoryId  String?
   category    Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
   createdAt   DateTime  @default(now())

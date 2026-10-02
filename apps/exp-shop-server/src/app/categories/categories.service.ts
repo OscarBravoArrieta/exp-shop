@@ -19,7 +19,10 @@ export class CategoriesService {
     }
 
     findAll(): Promise<PrismaCategory[]> {
-        return this.prisma.category.findMany({ orderBy: { createdAt: 'desc' } });
+        return this.prisma.category.findMany({
+            where: { isActive: true },
+            orderBy: { createdAt: 'desc' },
+        });
     }
 
     async findOne(id: string): Promise<PrismaCategory> {
@@ -45,6 +48,18 @@ export class CategoriesService {
     async remove(id: string): Promise<PrismaCategory> {
         try {
             return await this.prisma.category.delete({ where: { id } });
+        } catch (error) {
+            handlePrismaError(error, this.logger, 'una categoría');
+        }
+    }
+
+    /** Baja lógica: marca isActive en false en vez de borrar el registro físicamente. */
+    async softDelete(id: string): Promise<PrismaCategory> {
+        try {
+            return await this.prisma.category.update({
+                where: { id },
+                data: { isActive: false },
+            });
         } catch (error) {
             handlePrismaError(error, this.logger, 'una categoría');
         }

@@ -52,6 +52,15 @@ export class ProductsResolver {
         return this.productsService.remove(id);
     }
 
+    @Mutation(() => Product, { name: 'softDeleteProduct' })
+    @UseGuards(JwtAuthGuard)
+    softDeleteProduct(
+        @Args('id', { type: () => ID }) id: string,
+        @CurrentUser([ValidRoles.admin]) _admin: User
+    ): Promise<Product> {
+        return this.productsService.softDelete(id);
+    }
+
     @ResolveField(() => Category, { nullable: true })
     category(@Parent() product: Product): Promise<Category | null> {
         if (!product.categoryId) {

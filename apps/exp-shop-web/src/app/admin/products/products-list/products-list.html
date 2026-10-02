@@ -1,13 +1,20 @@
-<div class="content" style="width: 100%; height: 100%">
-    <h1>Administración de productos</h1>
-    <!-- ag-grid-angular usa `window` sin protección para SSR: se difiere para que
-         solo se construya en el navegador, nunca durante el render del servidor. -->
-    @defer (on immediate) {
-        <!-- <app-data-viewer-template>
-            
-        </app-data-viewer-template> -->
-
-    } @placeholder {
-        <div>Cargando tabla...</div>
+<div class="content flex justify-content-center align-items-center" style="width: 100%; height: 100%; min-height: 100vh;">     
+    @if (productsResource.isLoading()) {
+        <p-progress-spinner                  
+             strokeWidth="8" 
+             fill="transparent"                  
+             animationDuration=".5s"                  
+             aria-label="Loading"                 
+             [style]="{ width: '50px', height: '50px' }"              
+        />      
+    } @else if (productsResource.error()) {
+        <p>Error al cargar productos: {{ productsResource.error() }}</p>
+    } @else {
+        <app-data-viewer-template
+            style="width: 100%; height: 100%;"
+            [dataSet]="productsResource.value()"
+            [config]="config"
+            [columnDefs]="colDefs()"
+        />
     }
 </div>

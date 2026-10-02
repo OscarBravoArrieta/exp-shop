@@ -19,7 +19,10 @@ export class ProductsService {
     }
 
     findAll(): Promise<PrismaProduct[]> {
-        return this.prisma.product.findMany({ orderBy: { createdAt: 'desc' } });
+        return this.prisma.product.findMany({
+            where: { isActive: true },
+            orderBy: { createdAt: 'desc' },
+        });
     }
 
     async findOne(id: string): Promise<PrismaProduct> {
@@ -45,6 +48,18 @@ export class ProductsService {
     async remove(id: string): Promise<PrismaProduct> {
         try {
             return await this.prisma.product.delete({ where: { id } });
+        } catch (error) {
+            handlePrismaError(error, this.logger, 'un producto');
+        }
+    }
+
+    /** Baja lógica: marca isActive en false en vez de borrar el registro físicamente. */
+    async softDelete(id: string): Promise<PrismaProduct> {
+        try {
+            return await this.prisma.product.update({
+                where: { id },
+                data: { isActive: false },
+            });
         } catch (error) {
             handlePrismaError(error, this.logger, 'un producto');
         }

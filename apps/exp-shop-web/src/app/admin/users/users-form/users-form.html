@@ -1,1 +1,139 @@
-<p>users-form works!</p>
+<!--
+  Mismo lenguaje visual que auth/login/login.html (título + subtítulo, inputs
+  redondeados con borde, botón principal en píldora azul) adaptado a un
+  diálogo: sin el panel de marca de dos columnas, ancho completo del diálogo.
+-->
+<form class="users-form" novalidate (submit)="onSubmit($event)">
+    <h2 class="users-form__title">{{ title() }}</h2>
+    <p class="users-form__subtitle">{{ subtitle() }}</p>
+
+    @if (loading()) {
+        <p class="users-form__loading">Cargando datos del usuario...</p>
+    }
+
+    @if (errorMessage(); as message) {
+        <p-message severity="error" styleClass="users-form__error">{{ message }}</p-message>
+    }
+
+    @if (mode() === 'view' && lastStatus() !== null) {
+        <p class="users-form__status">
+            Estado:
+            <span [class.users-form__status--inactive]="!lastStatus()">
+                {{ lastStatus() ? 'Activo' : 'Inactivo' }}
+            </span>
+        </p>
+    }
+
+    <div class="users-form__field">
+        <label class="users-form__label" for="users-form-full-name">Nombre completo</label>
+        <input
+            id="users-form-full-name"
+            pInputText
+            type="text"
+            placeholder="Nombre y apellido"
+            autocomplete="name"
+            [formField]="userForm.fullName" />
+        @if (userForm.fullName().touched() && userForm.fullName().invalid()) {
+            @for (error of userForm.fullName().errors(); track error.message) {
+                <small class="users-form__field-error">{{ error.message }}</small>
+            }
+        }
+    </div>
+
+    <div class="users-form__field">
+        <label class="users-form__label" for="users-form-email">Email</label>
+        <input
+            id="users-form-email"
+            pInputText
+            type="email"
+            placeholder="correo@dominio.com"
+            autocomplete="email"
+            [formField]="userForm.email" />
+        @if (userForm.email().touched() && userForm.email().invalid()) {
+            @for (error of userForm.email().errors(); track error.message) {
+                <small class="users-form__field-error">{{ error.message }}</small>
+            }
+        }
+    </div>
+
+    @if (!readOnly()) {
+        <div class="users-form__field users-form__field--password">
+            <label class="users-form__label" for="users-form-password">
+                Contraseña
+                @if (mode() === 'edit') {
+                    <span class="users-form__label-hint">(déjala en blanco para no cambiarla)</span>
+                }
+            </label>
+            <div class="users-form__password-wrapper">
+                <input
+                    id="users-form-password"
+                    pInputText
+                    [type]="showPassword() ? 'text' : 'password'"
+                    placeholder="Contraseña"
+                    autocomplete="new-password"
+                    [formField]="userForm.password" />
+                <button
+                    type="button"
+                    class="users-form__toggle-password"
+                    (click)="showPassword.set(!showPassword())">
+                    {{ showPassword() ? 'Ocultar' : 'Mostrar' }}
+                </button>
+            </div>
+            @if (userForm.password().touched() && userForm.password().invalid()) {
+                @for (error of userForm.password().errors(); track error.message) {
+                    <small class="users-form__field-error">{{ error.message }}</small>
+                }
+            }
+        </div>
+    }
+
+    <div class="users-form__field">
+        <span class="users-form__label">Roles</span>
+        <div class="users-form__roles">
+            @for (role of roleOptions; track role) {
+                <label class="users-form__role">
+                    <input
+                        type="checkbox"
+                        [checked]="isRoleSelected(role)"
+                        [disabled]="readOnly()"
+                        (change)="toggleRole(role)" />
+                    {{ role }}
+                </label>
+            }
+        </div>
+    </div>
+
+    <div class="users-form__actions">
+        @if (mode() === 'edit') {
+            <button
+                pButton
+                type="button"
+                severity="danger"
+                [disabled]="submitting()"
+                class="users-form__delete"
+                (click)="onSoftDelete()">
+                Eliminar
+            </button>
+        }
+
+        <button
+            pButton
+            type="button"
+            severity="secondary"
+            variant="outlined"
+            class="users-form__cancel"
+            (click)="onCancel()">
+            {{ readOnly() ? 'Cerrar' : 'Cancelar' }}
+        </button>
+
+        @if (!readOnly()) {
+            <button pButton type="submit" [disabled]="submitting()" class="users-form__submit">
+                @if (submitting()) {
+                    Guardando...
+                } @else {
+                    Guardar
+                }
+            </button>
+        }
+    </div>
+</form>

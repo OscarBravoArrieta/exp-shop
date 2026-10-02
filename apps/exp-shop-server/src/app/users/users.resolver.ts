@@ -66,4 +66,12 @@ export class UsersResolver {
     ): Promise<User> {
         return this.usersService.remove(id);
     }
+
+    @Mutation(() => User, { name: 'softDeleteUser' })
+    softDeleteUser(
+        @Args('id', { type: () => ID }) id: string,
+        @CurrentUser([ValidRoles.admin]) _admin: User
+    ): Promise<User> {
+        return this.usersService.softDelete(id);
+    }
 }

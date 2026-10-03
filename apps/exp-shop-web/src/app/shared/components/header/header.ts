@@ -1,8 +1,13 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { PrimeNgModule } from '../../imports/primeng';
 import { ImageModule } from 'primeng/image';
 import { MenuItem } from 'primeng/api';
 import { Router } from '@angular/router';
+import { Auth } from '../../../core/services/auth';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { tap } from 'rxjs';
+
+
 
 @Component({
     selector: 'app-header',
@@ -10,36 +15,36 @@ import { Router } from '@angular/router';
     templateUrl: './header.html',
     styleUrl: './header.scss',
 })
-export class Header implements OnInit {
+export class Header  {
     readonly router = inject(Router);
-    items: MenuItem[] | undefined;
+    private readonly auth = inject(Auth);
 
-    ngOnInit() {
-        //console.log(this.userProfile());
-        this.items = [
-            {
-                label: 'My Account',
-                items: [
-                    { label: 'Actualizar perfil' },
-                    { label: 'Billing' },
-                    { label: 'Settings' },
-                ],
-            },
-            { separator: true },
-            {
-                label: 'Notifications',
-                items: [{ label: 'Enable notifications' }, { label: 'Play sound' }],
-            },
-            { separator: true },
-            {
-                label: 'Appearance',
-                items: [{ label: 'Light' }, { label: 'Dark' }, { label: 'System' }],
-            },
-        ];
-    }
+    protected readonly userProfile = toSignal(
+        this.auth.getProfile().pipe(
+            tap(data => console.log('¿Llegan datos del perfil?:', data)),
+        ), { initialValue: null }
+    );
+    //const perfilLabel = user ? `Actualizar perfil de ${user.fullName}` : 'Actualizar perfil';
 
-    callLogin() {
-        // this.router.navigate(['/login']);
-        console.log('callLogin');
-    }
+    protected readonly items: MenuItem[] = [
+        {
+            label: 'My Account',
+            items: [
+                { label: 'Actualizar perfil' },
+                { label: 'Billing' },
+                { label: 'Settings' },
+            ],
+        },
+        { separator: true },
+        {
+            label: 'Notifications',
+            items: [{ label: 'Enable notifications' }, { label: 'Play sound' }],
+        },
+        { separator: true },
+        {
+            label: 'Appearance',
+            items: [{ label: 'Cerrar sesión' }],
+        },
+    ];    
+    
 }

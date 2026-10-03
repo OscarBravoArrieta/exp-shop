@@ -17,25 +17,22 @@
         <div class="card flex justify-center">
             <div class="flex align-items-center justify-content-center mr-2">
                 <div class="card flex">
-                    <p class="green-50 text-sm">Hola, Usuario, Que bueno verte.</p>
-                </div>
-                <!-- <div class="card flex">
                     @if (userProfile(); as user) {
-                        <p class="green-50 text-sm">Hola, {{ user.name }}, ¡Qué bueno verte!</p>
+                        <p class="green-50 text-sm">Bienvenido, {{ user.fullName }}</p>
                     } @else {
-                        <p class="green-50 text-sm">Invitado (Cargando...)</p>
-                    }
-                </div> -->
+                        <p class="green-50 text-sm">Cargando perfil...</p>
+                    }                    
+                </div>
             </div>
 
-            <div class="flex align-items-center justify-content-center mr-2">
+            <!-- <div class="flex align-items-center justify-content-center mr-2">
                 <button pButton>Register</button>
             </div>
             <div class="flex align-items-center justify-content-center">
                 <button pButton severity="contrast" (click)="callLogin()">
                     <svg data-p-icon="sign-in"></svg>Login
                 </button>
-            </div>
+            </div> -->
             <div class="flex align-items-center justify-content-center">
                 <p-overlaybadge value="4" severity="danger">
                     <svg data-p-icon="shopping-cart" [size]="24"></svg>

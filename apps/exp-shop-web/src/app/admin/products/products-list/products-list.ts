@@ -43,7 +43,7 @@ export default class ProductsList {
             field: 'price',
             headerName: 'Precio',
             valueFormatter: params =>
-                params.value != null ? `$${Number(params.value).toFixed(2)}` : '',
+                params.value != null ? `${Number(params.value).toFixed(2)}` : '',
             editable: false,
         },
         {

@@ -26,6 +26,6 @@
 /* 3. ZONA CENTRAL CON SCROLL INDEPENDIENTE */
 .layout-content {
     flex: 1;
-    padding: 2rem;
+    padding: 1rem;
     overflow-y: auto; /* <-- ESTA ES LA CLAVE PARA EL SCROLL INTERNO */
 }

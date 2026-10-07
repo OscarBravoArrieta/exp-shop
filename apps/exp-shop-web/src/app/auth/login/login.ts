@@ -51,7 +51,7 @@ export default class Login {
             try {
                 const { email, password } = this.loginModel();
                 await firstValueFrom(this.auth.login(email, password));
-                await this.router.navigateByUrl('/');
+                await this.router.navigateByUrl('');
                 return undefined;
             } catch (error) {
                 this.loginError.set(this.toErrorMessage(error));

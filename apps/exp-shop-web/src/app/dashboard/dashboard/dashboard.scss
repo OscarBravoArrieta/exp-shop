@@ -1,0 +1,5 @@
+.grid-products{
+    flex: 1;
+    padding: 1rem;
+    overflow-y: auto; /* <-- ESTA ES LA CLAVE PARA EL SCROLL INTERNO */
+}

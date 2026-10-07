@@ -23,6 +23,12 @@ import { MinusCircle } from '@primeicons/angular/minus-circle';
 import { PenToSquare } from '@primeicons/angular/pen-to-square';
 import { PenLine } from '@primeicons/angular/pen-line';
 import { Eye } from '@primeicons/angular/eye';
+import { StarFill } from '@primeicons/angular/star-fill';
+import { MapMarker } from '@primeicons/angular/map-marker';
+import { Phone } from '@primeicons/angular/phone';
+import { Globe } from '@primeicons/angular/globe';
+import { Search } from '@primeicons/angular/search';
+import { Home } from '@primeicons/angular/home';
 
 import { ImageModule } from 'primeng/image';
 import { SpeedDialModule } from 'primeng/speeddial';
@@ -34,6 +40,11 @@ import { TooltipModule } from 'primeng/tooltip';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { Dialog } from 'primeng/dialog';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { CardModule } from 'primeng/card';
+import { AvatarModule } from 'primeng/avatar';
+import { TagModule } from 'primeng/tag';
+import { InputGroupModule } from 'primeng/inputgroup';
+import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 
 @NgModule({
     imports: [
@@ -69,7 +80,20 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
         TooltipModule,
         ConfirmDialogModule,
         Dialog,
-        ProgressSpinnerModule
+        ProgressSpinnerModule,
+        CardModule,
+        AvatarModule,
+        TagModule,
+        StarFill,
+        MapMarker,
+        Phone,
+        Globe,
+        Search,
+        Home,
+        InputGroupModule,
+        InputGroupAddonModule,
+
+
     ],
     exports: [
         InputTextModule,
@@ -94,6 +118,12 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
         PenToSquare,
         PenLine,
         Eye,
+        StarFill,
+        MapMarker,
+        Phone,
+        Globe,
+        Search,
+        Home,
         ImageModule,
         SpeedDialModule,
         BadgeModule,
@@ -103,7 +133,12 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
         TooltipModule,
         ConfirmDialogModule,
         Dialog,
-        ProgressSpinnerModule
+        ProgressSpinnerModule,
+        CardModule,
+        AvatarModule,
+        TagModule,
+        InputGroupModule,
+        InputGroupAddonModule,
     ],
 })
 export class PrimeNgModule {}

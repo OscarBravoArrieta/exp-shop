@@ -24,20 +24,15 @@
                     }                    
                 </div>
             </div>
+            
+            @if (!isAdmin()){
+                <div class="flex align-items-center justify-content-center">
+                    <p-overlaybadge value="4" severity="danger">
+                        <svg data-p-icon="shopping-cart" [size]="24"></svg>
+                    </p-overlaybadge>
+                </div>
+            }
 
-            <!-- <div class="flex align-items-center justify-content-center mr-2">
-                <button pButton>Register</button>
-            </div>
-            <div class="flex align-items-center justify-content-center">
-                <button pButton severity="contrast" (click)="callLogin()">
-                    <svg data-p-icon="sign-in"></svg>Login
-                </button>
-            </div> -->
-            <div class="flex align-items-center justify-content-center">
-                <p-overlaybadge value="4" severity="danger">
-                    <svg data-p-icon="shopping-cart" [size]="24"></svg>
-                </p-overlaybadge>
-            </div>
             <div class="flex align-items-center justify-content-center ml-2">
                 <div class="card flex justify-center ml-2">
                     <div class="card">
@@ -46,13 +41,9 @@
                                 <button
                                     pRipple
                                     class="relative overflow-hidden w-full border-0 bg-transparent flex items-start p-2 pl-4 hover:bg-surface-100 dark:hover:bg-surface-800 rounded-none cursor-pointer transition-colors duration-200">
-                                    <!-- <label class="flex flex-column">
-                                    <div class="flex align-items-left font-bold">Usuario</div>
-                                    <div class="flex align-items-left text-sm">Perfil</div>
-                                </label> -->
                                 </button>
                             </ng-template>
-                        </p-menu>
+                        </p-menu>                        
                         <button
                             type="button"
                             pButton

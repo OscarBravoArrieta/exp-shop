@@ -9,10 +9,11 @@ import type { ColDef } from 'ag-grid-community'; // Column Definition Type Inter
 import { ActionButtonsCell } from '../../../shared/components/action-buttons-cell/action-buttons-cell';
 import { EntityConfig } from '../../../core/models/entity-config.model';
 import { CategoriesForm } from '../categories-form/categories-form';
+import { Loading } from '../../../../app/shared/components/loading/loading';
 
 @Component({
     selector: 'app-categories-list',
-    imports: [DataViewerTemplate, PrimeNgModule],
+    imports: [DataViewerTemplate, PrimeNgModule, Loading],
     templateUrl: './categories-list.html',
     styleUrl: './categories-list.scss',
 })

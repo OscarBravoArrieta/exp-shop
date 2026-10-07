@@ -51,6 +51,11 @@ export const appRoutes: Route[] = [
                 loadComponent: () => import('./auth/profile/profile'),
             },
             {
+                path: '',
+                loadChildren: () => import('./dashboard/dashboard.routes'),
+
+            },
+            {
                 path: 'unauthorized',
                 title: 'No autorizado',
                 component: Unauthorized,

@@ -1,1 +1,39 @@
-<p>dashboard works!</p>
+<div>
+    <div class="">   
+        @if(productsResource.isLoading()) {
+            <app-loading></app-loading>
+        } @else if (productsResource.error()) {
+            <p>Error al cargar los productos: {{productsResource.error()}}</p>
+        } @else if (productsResource.value().length === 0) {
+            <p>No se encontraron productos.</p>
+        } @else {
+
+            <div class="flex justify-content-between flex-wrap">
+                <div
+                    class="flex align-items-center justify-content-center w-4rem h-4rem font-bold border-round">
+                   <p class="text-base w-10">Productos</p>
+                </div>
+                <div class="flex align-items-center justify-content-center">
+                    <div class="space-y-4 max-w-xs mx-auto">
+                        <p-inputgroup>
+                            <input pInputText placeholder="Buscar" />
+                            <p-inputgroup-addon>
+                                <button type="button" pButton severity="secondary" variant="text" iconOnly>
+                                    <svg data-p-icon="search" />
+                                </button>
+                            </p-inputgroup-addon>
+                        </p-inputgroup>
+                    </div>
+                </div>
+            </div>             
+          
+            <div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4 border-round overflow-auto justify-content-center w-full min-w-full min-h-full border-round min-w-full m-1">
+                @for (product of productsResource.value(); track product.id) {
+                    <app-product-details 
+                        [product]="product"
+                    />
+                }
+            </div>
+        }
+    </div>
+</div>

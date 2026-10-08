@@ -32,8 +32,8 @@ const PRODUCT_FIELDS = `
 `;
 
 const PRODUCTS_QUERY = gql`
-  query Products {
-    products { ${PRODUCT_FIELDS} }
+  query Products($categoryId: ID) {
+    products(categoryId: $categoryId) { ${PRODUCT_FIELDS} }
   }
 `;
 
@@ -69,10 +69,12 @@ const SOFT_DELETE_PRODUCT_MUTATION = gql`
 export class Products {
     private readonly apollo = inject(Apollo);
 
-    getProducts(): Observable<Product[]> {
+    /** Sin `categoryId`, el backend devuelve el catálogo completo (ver ProductsService.findAll). */
+    getProducts(categoryId?: string): Observable<Product[]> {
         return this.apollo
             .query<{ products: Product[] }>({
                 query: PRODUCTS_QUERY,
+                variables: { categoryId },
                 fetchPolicy: 'network-only',
             })
             .pipe(map(result => result.data?.products ?? []));

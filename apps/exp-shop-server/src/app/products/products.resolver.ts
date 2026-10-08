@@ -16,8 +16,10 @@ export class ProductsResolver {
     constructor(private readonly productsService: ProductsService) {}
 
     @Query(() => [Product], { name: 'products' })
-    findAll(): Promise<Product[]> {
-        return this.productsService.findAll();
+    findAll(
+        @Args('categoryId', { type: () => ID, nullable: true }) categoryId?: string
+    ): Promise<Product[]> {
+        return this.productsService.findAll(categoryId);
     }
 
     @Query(() => Product, { name: 'product' })

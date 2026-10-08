@@ -1,5 +1,22 @@
-.grid-products{
+// El router-outlet (.layout-content en layout.scss) ya tiene su propio
+// overflow-y: auto — por eso, aunque .grid-products tuviera scroll propio,
+// el header terminaba haciendo scroll junto con la grilla: nada acotaba la
+// altura de .dashboard, así que crecía libremente y el scroll real quedaba
+// en .layout-content (el contenedor completo), no en la grilla.
+.dashboard {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 0;
+}
+
+.dashboard__header {
+    flex-shrink: 0;
+}
+
+.grid-products {
     flex: 1;
+    min-height: 0; /* sin esto, un hijo flex no se encoge por debajo de su contenido y el overflow interno nunca se activa */
     padding: 1rem;
     overflow-y: auto; /* <-- ESTA ES LA CLAVE PARA EL SCROLL INTERNO */
 }

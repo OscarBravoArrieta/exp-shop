@@ -21,9 +21,10 @@
                 <p>Cargando categorías...</p>
             } @else {
                 <ul>
-                    <!-- <li routerLink="/dashboard" routerLinkActive="active"><svg data-p-icon="tablet"></svg>Todas las categorías</li> -->
+                    <li routerLink="/dashboard" routerLinkActive="active">
+                        <svg data-p-icon="tablet"></svg>Todas las categorías
+                    </li>
                     @for (category of categoriesResource.value(); track category.id) {
-                        <!-- <li routerLink="/category/{{category.id}}" routerLinkActive="active"></li> -->                         
                         <li routerLink="/category/{{category.id}}" routerLinkActive="active">
                             <svg data-p-icon="tablet"></svg>{{category.name}}
                         </li>

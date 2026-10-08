@@ -22,10 +22,14 @@
     </ng-template>
     <div class="space-y-4">
         <p>{{product()?.description}}</p>
+        <div class="flex items-center gap-2">            
+            <span><b>{{product()?.price | currency: 'EUR'}}</b> </span>
+        </div>        
         <div class="flex items-center gap-2">
             <svg data-p-icon="star-fill" class="text-yellow-500"></svg>
             <span><b>4.6</b> (200+ reviews)</span>
         </div>
+
         <div class="flex items-center gap-2">
             <svg data-p-icon="map-marker"></svg>
             <span>Tokyo, Shibuya-ku</span>
@@ -33,13 +37,14 @@
     </div>
     <ng-template #footer>
         <div class="flex items-center gap-2 mt-4">
-            <button type="button" pButton severity="secondary" [outlined]="true" class="flex-1">
+            <!-- <button type="button" pButton severity="secondary" [outlined]="true" class="flex-1">
                 <svg data-p-icon="phone"></svg>
                 Call Us
-            </button>
-            <button type="button" pButton class="flex-1">
-                <svg data-p-icon="globe"></svg>
-                Visit Site
+            </button> -->
+            <button type="button" pButton class="flex-1" (click)="addToCart()">
+                
+                <svg data-p-icon="shopping-cart" [size]="24"></svg>
+                Agregar al carrito
             </button>
         </div>
     </ng-template>

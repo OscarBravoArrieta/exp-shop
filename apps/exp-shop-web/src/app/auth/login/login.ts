@@ -51,7 +51,7 @@ export default class Login {
             try {
                 const { email, password } = this.loginModel();
                 await firstValueFrom(this.auth.login(email, password));
-                await this.router.navigateByUrl('');
+                await this.router.navigateByUrl(this.resolveHomeRoute());
                 return undefined;
             } catch (error) {
                 this.loginError.set(this.toErrorMessage(error));
@@ -60,6 +60,12 @@ export default class Login {
                 this.submitting.set(false);
             }
         });
+    }
+
+    /** admin → '/' (home); cualquier otro rol (p.ej. 'user') → '/dashboard' (catálogo). */
+    private resolveHomeRoute(): string {
+        const roles = this.auth.currentUser()?.roles ?? [];
+        return roles.includes('admin') ? '/' : '/dashboard';
     }
 
     private toErrorMessage(error: unknown): string {

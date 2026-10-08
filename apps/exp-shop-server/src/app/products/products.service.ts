@@ -18,9 +18,12 @@ export class ProductsService {
         }
     }
 
-    findAll(): Promise<PrismaProduct[]> {
+    findAll(categoryId?: string): Promise<PrismaProduct[]> {
         return this.prisma.product.findMany({
-            where: { isActive: true },
+            where: {
+                isActive: true,
+                ...(categoryId ? { categoryId } : {}),
+            },
             orderBy: { createdAt: 'desc' },
         });
     }

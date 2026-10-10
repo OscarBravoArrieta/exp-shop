@@ -3,10 +3,9 @@ import { Router } from '@angular/router';
 import { email, form, FormField, minLength, required, submit } from '@angular/forms/signals';
 import { firstValueFrom } from 'rxjs';
 import { CombinedGraphQLErrors } from '@apollo/client/errors';
-import { ButtonModule } from 'primeng/button';
-import { InputTextModule } from 'primeng/inputtext';
 import { MessageModule } from 'primeng/message';
 import { Auth } from '../../core/services/auth';
+import { PrimeNgModule } from '../../shared/imports/primeng';
 
 interface LoginFormModel {
     email: string;
@@ -15,7 +14,7 @@ interface LoginFormModel {
 
 @Component({
     selector: 'app-login',
-    imports: [FormField, ButtonModule, InputTextModule, MessageModule],
+    imports: [FormField, PrimeNgModule, MessageModule],
     templateUrl: './login.html',
     styleUrl: './login.scss',
 })

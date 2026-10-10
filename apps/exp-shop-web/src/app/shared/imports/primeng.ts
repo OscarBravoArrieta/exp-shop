@@ -45,6 +45,8 @@ import { AvatarModule } from 'primeng/avatar';
 import { TagModule } from 'primeng/tag';
 import { InputGroupModule } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
+import { GalleriaModule } from 'primeng/galleria';
+import { ToastModule } from 'primeng/toast';
 
 @NgModule({
     imports: [
@@ -92,8 +94,8 @@ import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
         Home,
         InputGroupModule,
         InputGroupAddonModule,
-
-
+        GalleriaModule,
+        ToastModule,
     ],
     exports: [
         InputTextModule,
@@ -139,6 +141,8 @@ import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
         TagModule,
         InputGroupModule,
         InputGroupAddonModule,
+        GalleriaModule,
+        ToastModule,
     ],
 })
 export class PrimeNgModule {}

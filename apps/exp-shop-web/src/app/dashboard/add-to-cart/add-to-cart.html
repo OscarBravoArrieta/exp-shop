@@ -1,1 +1,81 @@
-<p>add-to-cart works!</p>
+<!--
+  Diseño "Agregar al carrito" (propuesta 1a, página de detalle) de
+  claude.ai/design — implementado como contenido del diálogo que abre
+  ProductDetails.addToCart() (PrimeNG DynamicDialog). No se repite la barra
+  "Exp Shop / Catálogo / carrito" del mockup acá: ese es el header global de
+  la app (fuera de este diálogo), no algo que deba vivir dentro de él.
+
+  Solo `quantity` es editable — el resto (id/title/price/description/
+  category/images) lo completa quien abre el diálogo con los datos reales
+  del producto; por eso se muestran como texto, no como campos de formulario.
+-->
+<p-toast />
+
+<form class="add-to-cart" novalidate (submit)="onSubmit($event)">
+    <p-galleria
+        class="add-to-cart__gallery"
+        [value]="addToCartModel().images"
+        [numVisible]="3"
+        [showThumbnails]="true"
+        [showIndicators]="true"
+        [circular]="true">
+        <ng-template #item let-image>
+            <img class="add-to-cart__image" [src]="image" [alt]="addToCartModel().title" />
+        </ng-template>
+        <ng-template #thumbnail let-image>
+            <img class="add-to-cart__thumbnail" [src]="image" [alt]="addToCartModel().title" />
+        </ng-template>
+    </p-galleria>
+
+    <div class="add-to-cart__info">
+        <div class="add-to-cart__meta">
+            <p-tag [rounded]="true" [value]="addToCartModel().category" />
+            <span class="add-to-cart__id">ID {{ addToCartModel().id }}</span>
+        </div>
+
+        <h2 class="add-to-cart__title">{{ addToCartModel().title }}</h2>
+        <p class="add-to-cart__price">{{ addToCartModel().price | currency }}</p>
+        <p class="add-to-cart__description">{{ addToCartModel().description }}</p>
+
+        <div class="add-to-cart__quantity">
+            <label class="add-to-cart__label" for="add-to-cart-quantity">Cantidad</label>
+            <!--
+              p-inputnumber (el stepper con botones −/+ del diseño) no
+              implementa la interfaz que Signal Forms necesita para
+              [formField] — solo funciona con [(ngModel)]/ControlValueAccessor,
+              y eso exigiría agregar un método en add-to-cart.ts, fuera del
+              alcance de "solo el html" (ver NG8002 al compilar con
+              p-inputnumber). Se usa un input nativo, que sí funciona con
+              [formField] en todo el resto de la app (ver products-form.html).
+            -->
+            <input
+                id="add-to-cart-quantity"
+                pInputText
+                type="number"
+                [formField]="addToCartForm.quantity" />
+            @if (addToCartForm.quantity().touched() && addToCartForm.quantity().invalid()) {
+                @for (error of addToCartForm.quantity().errors(); track error.message) {
+                    <small class="add-to-cart__field-error">{{ error.message }}</small>
+                }
+            }
+        </div>
+
+        <div class="add-to-cart__subtotal">
+            <span>Subtotal</span>
+            <strong>{{ addToCartModel().price * addToCartModel().quantity | currency }}</strong>
+        </div>
+
+        <div class="add-to-cart__actions">
+            <button pButton type="submit" [rounded]="true" class="add-to-cart__submit">
+                <svg data-p-icon="shopping-cart"></svg>
+                Agregar al carrito
+            </button>
+            <!-- "Comprar ahora" viene en el diseño pero sin flujo propio definido
+                 todavía (checkout directo) — queda visual, sin lógica, hasta que
+                 se pida esa funcionalidad. -->
+            <button pButton type="button" [rounded]="true" [outlined]="true" class="add-to-cart__buy-now">
+                Comprar ahora
+            </button>
+        </div>
+    </div>
+</form>

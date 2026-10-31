@@ -27,27 +27,28 @@ export class ProductDetails implements OnDestroy {
         this.ref = this.dialogService.open(AddToCart, {
             header: 'Agregar Producto',
             data: {
-                product: this.product()?.id,
+                product: this.product(),
             },
-                         width: '50%',
-             height: '80%',
-             modal:true,
-             closable: true,
-             draggable: true,
-             contentStyle: {"max-height": "500px", "min-height": "500px", "overflow": "auto"},
-             breakpoints: {
-                 '960px': '75vw',
-                 '640px': '90vw'
-             },
+            width: '50%',
+            height: '80%',
+            modal:true,
+            closable: true,
+            draggable: true,
+            // contentStyle: { "max-height": "500px", "min-height": "500px", "overflow": "auto"},
+            contentStyle: { "max-height": "500px", "overflow": "auto" }, 
+            breakpoints: {
+                '960px': '75vw',
+                '640px': '90vw'
+            },
         }) ?? undefined;
         this.ref?.onClose.subscribe((product: Product) => {
-             if (product) {
-                 this.messageService.add({
-                     severity: 'success',
-                     summary: 'Producto agregado',
-                     detail: ''
-                 })
-             }
+            if (product) {
+                this.messageService.add({
+                    severity: 'success',
+                    summary: 'Producto agregado',
+                    detail: ''
+                })
+            }
         })
     }
 

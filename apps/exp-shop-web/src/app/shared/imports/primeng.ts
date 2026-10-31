@@ -29,6 +29,8 @@ import { Phone } from '@primeicons/angular/phone';
 import { Globe } from '@primeicons/angular/globe';
 import { Search } from '@primeicons/angular/search';
 import { Home } from '@primeicons/angular/home';
+import { ChevronLeft } from '@primeicons/angular/chevron-left';
+import { ChevronRight } from '@primeicons/angular/chevron-right';
 
 import { ImageModule } from 'primeng/image';
 import { SpeedDialModule } from 'primeng/speeddial';
@@ -47,6 +49,8 @@ import { InputGroupModule } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { GalleriaModule } from 'primeng/galleria';
 import { ToastModule } from 'primeng/toast';
+import { GalleryModule } from 'primeng/gallery';
+import { CarouselModule } from 'primeng/carousel';
 
 @NgModule({
     imports: [
@@ -73,6 +77,8 @@ import { ToastModule } from 'primeng/toast';
         PenToSquare,
         PenLine,
         Eye,
+        ChevronLeft,
+        ChevronRight,
         ImageModule,
         SpeedDialModule,
         BadgeModule,
@@ -96,6 +102,8 @@ import { ToastModule } from 'primeng/toast';
         InputGroupAddonModule,
         GalleriaModule,
         ToastModule,
+        GalleryModule,
+        CarouselModule
     ],
     exports: [
         InputTextModule,
@@ -120,6 +128,8 @@ import { ToastModule } from 'primeng/toast';
         PenToSquare,
         PenLine,
         Eye,
+        ChevronLeft,
+        ChevronRight,
         StarFill,
         MapMarker,
         Phone,
@@ -143,6 +153,8 @@ import { ToastModule } from 'primeng/toast';
         InputGroupAddonModule,
         GalleriaModule,
         ToastModule,
+        GalleryModule,
+        CarouselModule
     ],
 })
 export class PrimeNgModule {}

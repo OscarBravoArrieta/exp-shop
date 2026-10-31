@@ -27,6 +27,45 @@
         </ng-template>
     </p-galleria>
 
+    <!-- <div class="mt-8 mb-16">
+        <p-carousel class="max-w-xl mx-auto" align="center" [loop]="true" [slidesPerPage]="1.75">
+            <p-carousel-content class="h-60">
+                @for (item of addToCartModel().images; track item) {
+                    <p-carousel-item>
+                        <div class="h-full text-5xl font-semibold bg-surface-50 dark:bg-surface-950 text-surface-950 dark:text-surface-0 flex flex-col items-center justify-center gap-6 rounded-xl border border-surface">
+                            
+                            <img [attr.draggable]="false" [src]="item" [alt]="'Image ' + (item + 1)" class="h-full w-full object-cover select-none" />                                 
+                        </div>
+                    </p-carousel-item>
+                }
+            </p-carousel-content>
+            <div class="flex mt-4 gap-4">
+                <p-carousel-indicators></p-carousel-indicators>
+                <div class="flex items-center justify-end gap-2 flex-1">
+                    <button
+
+
+                        class="w-9 h-9 flex items-center justify-center rounded-full border border-surface bg-surface-0 dark:bg-surface-800 text-surface-500 dark:text-surface-400 hover:opacity-75 cursor-pointer transition-opacity"
+                    >
+                        <svg data-p-icon="chevron-left"></svg>
+                    </button>
+                    <button
+
+                        class="w-9 h-9 flex items-center justify-center rounded-full border border-surface bg-surface-0 dark:bg-surface-800 text-surface-500 dark:text-surface-400 hover:opacity-75 cursor-pointer transition-opacity"
+                    >
+                        <svg data-p-icon="chevron-right"></svg>
+                    </button>
+                </div>
+            </div>
+        </p-carousel>
+    </div>      -->
+
+
+
+
+
+
+  
     <div class="add-to-cart__info">
         <div class="add-to-cart__meta">
             <p-tag [rounded]="true" [value]="addToCartModel().category" />

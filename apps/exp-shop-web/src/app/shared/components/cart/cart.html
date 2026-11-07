@@ -1,1 +1,94 @@
-<p>cart works!</p>
+<p-toast />
+<p-confirmdialog />
+
+@if (items().length === 0) {
+    <div class="cart__empty flex flex-column align-items-center justify-content-center gap-3">
+        <svg data-p-icon="shopping-cart" [size]="48"></svg>
+        <p class="cart__empty-text">No ha seleccionado productos</p>
+        <button pButton type="button" [rounded]="true" (click)="goToCatalog()">
+            Ver catálogo
+        </button>
+    </div>
+} @else {
+    <div class="cart">
+        <section class="cart__list">
+            <h1 class="cart__title">Carrito</h1>
+            <p class="cart__count">{{ summaryLabel() }}</p>
+
+            <table class="cart__table">
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>Cantidad</th>
+                        <th class="cart__num">Precio</th>
+                        <th class="cart__num">Total</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (item of items(); track item.id) {
+                        <tr>
+                            <td>
+                                <div class="cart__product">
+                                    <img class="cart__thumb" [src]="item.images[0]" [alt]="item.title" />
+                                    <span class="cart__name">{{ item.title }}</span>
+                                </div>
+                            </td>
+                            <td>
+                                <input
+                                    class="cart__qty-input"
+                                    type="number"
+                                    pInputText
+                                    min="1"
+                                    max="99"
+                                    [value]="item.quantity"
+                                    [attr.aria-label]="'Cantidad de ' + item.title"
+                                    (change)="onQuantityChange(item.id, quantityInput.value)"
+                                    #quantityInput />
+                            </td>
+                            <td class="cart__num">{{ item.price | currency }}</td>
+                            <td class="cart__num"><strong>{{ item.price * item.quantity | currency }}</strong></td>
+                            <td class="cart__num">
+                                <button
+                                    pButton
+                                    type="button"
+                                    iconOnly
+                                    rounded
+                                    severity="danger"
+                                    variant="outlined"
+                                    [attr.aria-label]="'Eliminar ' + item.title"
+                                    (click)="onRemove(item)">
+                                    <svg data-p-icon="minus-circle"></svg>
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <button pButton type="button" [text]="true" class="cart__back" (click)="goToCatalog()">
+                Seguir comprando
+            </button>
+        </section>
+
+        <aside class="cart__summary">
+            <h2 class="cart__summary-title">Total a pagar</h2>
+            <div class="cart__summary-amount">{{ totalAmount() | currency }}</div>
+            <div class="cart__summary-row">
+                <span>Subtotal</span>
+                <span>{{ totalAmount() | currency }}</span>
+            </div>
+            @if (!checkoutStarted()) {
+                <button pButton type="button" [rounded]="true" class="cart__checkout" (click)="onCheckout()">
+                    Ir al pago
+                </button>
+            } @else {
+                <div #paypalContainer class="cart__paypal"></div>
+                <button pButton type="button" [text]="true" class="cart__cancel-checkout" (click)="cancelCheckout()">
+                    Cancelar
+                </button>
+            }
+            <p class="cart__summary-fine">Los impuestos y el envío se calculan en el siguiente paso.</p>
+        </aside>
+    </div>
+}

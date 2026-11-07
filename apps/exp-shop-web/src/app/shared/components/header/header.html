@@ -26,8 +26,8 @@
             </div>
             
             @if (!isAdmin()){
-                <div class="flex align-items-center justify-content-center">
-                    <p-overlaybadge value="4" severity="danger">
+                <div class="flex align-items-center justify-content-center cursor-pointer" routerLink="/products-in-cart">
+                    <p-overlaybadge [value]="cartItemsCount()" severity="danger">
                         <svg data-p-icon="shopping-cart" [size]="24"></svg>
                     </p-overlaybadge>
                 </div>

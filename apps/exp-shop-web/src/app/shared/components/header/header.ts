@@ -2,24 +2,28 @@ import { Component, computed, inject } from '@angular/core';
 import { PrimeNgModule } from '../../imports/primeng';
 import { ImageModule } from 'primeng/image';
 import { MenuItem } from 'primeng/api';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { Auth } from '../../../core/services/auth';
+import { cartStore } from '../../../core/stores/cart.store';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { tap } from 'rxjs';
 
 @Component({
     selector: 'app-header',
-    imports: [PrimeNgModule, ImageModule],
+    imports: [PrimeNgModule, ImageModule, RouterLink],
     templateUrl: './header.html',
     styleUrl: './header.scss',
 })
 export class Header  {
     readonly router = inject(Router);
     private readonly auth = inject(Auth);
+    private readonly cartStore = inject(cartStore);
 
     protected readonly isAdmin = computed(
         () => this.auth.currentUser()?.roles.includes('admin') ?? false
     );
+
+    protected readonly cartItemsCount = this.cartStore.totalItems;
 
     protected readonly userProfile = toSignal(
         this.auth.getProfile().pipe(

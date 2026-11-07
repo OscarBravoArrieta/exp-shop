@@ -1,0 +1,158 @@
+// Mismos tokens que add-to-cart.scss / users-form.scss / auth/login/login.scss.
+$brand-blue: #0b49c7;
+$brand-blue-dark: #083a9e;
+$text-muted: #6b7280;
+$border-color: #d9dee6;
+
+.cart {
+    display: grid;
+    grid-template-columns: 1fr minmax(280px, 360px);
+    gap: 2rem;
+    align-items: start;
+
+    &__title {
+        font-weight: 300;
+        font-size: 2rem;
+        margin: 0;
+    }
+
+    &__count {
+        color: $text-muted;
+        margin: 0.5rem 0 1.5rem;
+    }
+
+    &__table {
+        width: 100%;
+        border-collapse: collapse;
+
+        th {
+            text-align: left;
+            font-weight: 400;
+            font-size: 0.8rem;
+            color: $text-muted;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid $border-color;
+        }
+
+        td {
+            padding: 1rem 0;
+            border-bottom: 1px solid $border-color;
+            vertical-align: middle;
+        }
+    }
+
+    &__num {
+        text-align: right;
+    }
+
+    &__product {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    &__thumb {
+        width: 56px;
+        height: 56px;
+        object-fit: cover;
+        border-radius: 8px;
+        flex: none;
+    }
+
+    &__name {
+        font-weight: 600;
+    }
+
+    &__qty-input {
+        width: 70px;
+        padding: 0.4rem 0.6rem;
+        border-radius: 8px;
+        border: 1px solid $border-color;
+        text-align: center;
+    }
+
+    &__back {
+        margin-top: 1rem;
+        padding-left: 0;
+        color: $text-muted;
+    }
+
+    &__summary {
+        background-color: $brand-blue;
+        color: #ffffff;
+        border-radius: 12px;
+        padding: 2rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    &__summary-title {
+        font-weight: 400;
+        font-size: 0.9rem;
+        color: rgba(255, 255, 255, 0.7);
+        margin: 0;
+    }
+
+    &__summary-amount {
+        font-size: 2.5rem;
+        font-weight: 300;
+        margin: 0.5rem 0 1rem;
+    }
+
+    &__summary-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.5rem 0;
+        border-top: 1px solid rgba(255, 255, 255, 0.22);
+    }
+
+    &__checkout {
+        margin-top: 1.5rem;
+        background-color: #ffffff;
+        color: $brand-blue;
+        border-color: #ffffff;
+        justify-content: center;
+
+        &:hover {
+            opacity: 0.92;
+        }
+    }
+
+    &__paypal {
+        margin-top: 1.5rem;
+        min-height: 45px;
+    }
+
+    &__cancel-checkout {
+        margin-top: 0.5rem;
+        color: rgba(255, 255, 255, 0.85);
+        justify-content: center;
+    }
+
+    &__summary-fine {
+        font-size: 0.78rem;
+        color: rgba(255, 255, 255, 0.7);
+        text-align: center;
+        margin-top: 0.75rem;
+    }
+
+    @media (max-width: 860px) {
+        grid-template-columns: 1fr;
+    }
+}
+
+.cart__empty {
+    padding: 4rem 1rem;
+    text-align: center;
+
+    svg {
+        color: $text-muted;
+    }
+}
+
+.cart__empty-text {
+    color: $text-muted;
+    font-size: 1.1rem;
+    margin: 0;
+}

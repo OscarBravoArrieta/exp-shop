@@ -17,6 +17,6 @@ import { Routes } from '@angular/router';
      {
          path: 'products-in-cart',
          title: 'Productos en el carrito',
-         loadComponent: () => import ('../../app/dashboard/add-to-cart/add-to-cart'),
+         loadComponent: () => import ('../../app/shared/components/cart/cart'),
      }
  ] as Routes

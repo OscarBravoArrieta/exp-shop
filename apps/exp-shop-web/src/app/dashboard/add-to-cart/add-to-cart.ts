@@ -4,7 +4,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CurrencyPipe } from '@angular/common';
 import { form, FormField, min, required } from '@angular/forms/signals';
 import { DynamicDialogConfig, DynamicDialogRef} from 'primeng/dynamicdialog'
-//import { Product } from '../../core/models/product.model';
+import { Product } from '../../core/models/products.model';
+import { cartStore } from '../../core/stores/cart.store';
 
 interface AddToCartFormModel {
     id: string;
@@ -32,7 +33,8 @@ export class AddToCart implements OnInit {
 
     private dynamicDialogConfig = inject (DynamicDialogConfig)
     private ref = inject (DynamicDialogRef)
-    currentId = signal<string>('')
+    private readonly cartStore = inject(cartStore)
+    private readonly product = signal<Product | null>(null)
 
     protected readonly addToCartModel = signal<AddToCartFormModel>({
         id: '',
@@ -51,7 +53,7 @@ export class AddToCart implements OnInit {
         if (this.dynamicDialogConfig.data && this.dynamicDialogConfig.data.product) {
             const product = this.dynamicDialogConfig.data;
             console.log('Producto recibido en AddToCart:', product.product.id);
-            this.currentId.set(product.id);
+            this.product.set(product.product);
             this.addToCartModel.set({
                 id: product.product.id,
                 title: product.product.title,
@@ -82,10 +84,11 @@ export class AddToCart implements OnInit {
 
     protected onSubmit(event: Event): void {
         event.preventDefault();
-        // Aquí puedes agregar la lógica para agregar el producto al carrito
+        const product = this.product();
+        if (!product) return;
+
+        this.cartStore.addToCart(product, this.addToCartModel().quantity);
         this.ref.close(this.addToCartModel());
-        console.log('Producto agregado al carrito:', this.addToCartModel);
-       
     }
 
     closeDialog(){
